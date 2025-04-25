@@ -9,6 +9,24 @@ import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 
+const rotatingBounce = {
+    0: {
+        transform: [{ rotate: '0deg' }, { translateY: 0 }],
+    },
+    0.25: {
+        transform: [{ rotate: '4deg' }, { translateY: -4 }],
+    },
+    0.5: {
+        transform: [{ rotate: '-4deg' }, { translateY: -8 }],
+    },
+    0.75: {
+        transform: [{ rotate: '2deg' }, { translateY: 0 }],
+    },
+    1: {
+        transform: [{ rotate: '0deg' }, { translateY: 2 }],
+    },
+};
+
 const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyImage, cupImage }) => {
     const navigation = useNavigation();
 
@@ -20,9 +38,11 @@ const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyIm
             blurRadius={1}
         >
             <Animatable.Image
-                animation="bounceIn"
+                animation={rotatingBounce}
+                easing={"ease-in-out"}
+                iterationCount={'infinite'}
                 delay={300}
-                duration={1200}
+                duration={2200}
                 source={pinpointImage}
                 style={styles.pinpointImage}
             />
@@ -44,7 +64,7 @@ const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyIm
             <Animatable.View animation="fadeInUp" delay={1300} style={styles.benefitContainer}>
                 <View style={styles.benefitItem}>
                     <ImageBackground source={compassImage} style={styles.benefitImage} />
-                    <Text style={styles.benefitText}>Personalized Trails</Text>
+                    <Text style={styles.benefitText}>Custom Trails</Text>
                 </View>
 
                 <View style={styles.benefitItem}>
