@@ -81,7 +81,7 @@ const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyIm
             <Animatable.View animation="fadeIn" delay={1600}>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('RegisterScreen')}
+                    onPress={() => navigation.navigate('RegistrationScreenOne')}
                 >
                     <Text style={styles.buttonText}>Let's begin!</Text>
                 </TouchableOpacity>

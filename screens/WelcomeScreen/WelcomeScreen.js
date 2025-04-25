@@ -33,17 +33,15 @@ const WelcomeScreen = () => {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
-        <WelcomeContent
-          backgroundImage={backgroundImage}
-          pinpointImage={pinpointImage}
-          compassImage={compassImage}
-          safetyImage={safetyImage}
-          cupImage={cupImage}
-        />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
+      <WelcomeContent
+        backgroundImage={backgroundImage}
+        pinpointImage={pinpointImage}
+        compassImage={compassImage}
+        safetyImage={safetyImage}
+        cupImage={cupImage}
+      />
+    </SafeAreaView>
   );
 };
 
