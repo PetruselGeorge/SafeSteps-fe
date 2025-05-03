@@ -6,7 +6,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 
 const rotatingBounce = {
@@ -27,8 +26,7 @@ const rotatingBounce = {
     },
 };
 
-const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyImage, cupImage }) => {
-    const navigation = useNavigation();
+const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyImage, cupImage, handleNext }) => {
 
     return (
         <ImageBackground
@@ -81,7 +79,7 @@ const WelcomeContent = ({ backgroundImage, pinpointImage, compassImage, safetyIm
             <Animatable.View animation="fadeIn" delay={1600}>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('RegistrationScreenOne')}
+                    onPress={handleNext}
                 >
                     <Text style={styles.buttonText}>Let's begin!</Text>
                 </TouchableOpacity>
