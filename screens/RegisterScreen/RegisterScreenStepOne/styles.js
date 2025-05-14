@@ -65,14 +65,14 @@ export default StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     fontSize: 16,
-    color:'white'
+    color: "white",
   },
   button: {
     backgroundColor: "rgb(28, 125, 186)",
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: "center",
-    marginTop:10,
+    marginTop: 10,
   },
   buttonDisabled: {
     backgroundColor: "rgba(160, 207, 255, 0.44)",
@@ -110,4 +110,59 @@ export default StyleSheet.create({
     flex: 1,
     color: "white",
   },
+  inputFieldName: {
+    flex: 1,
+    color: "white",
+    textTransform: "capitalize",
+  },
+
+  strengthWrapper: {
+    width: "100%",
+    marginTop: 12,
+    marginBottom: 20,
+  },
+
+  strengthText: {
+    color: "#A0CFFF", // același accent deschis din buton-disabled
+    fontSize: 14,
+    fontWeight: "600",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+    marginBottom: 6,
+  },
+
+  strengthTrack: {
+    width: "100%",
+    height: 10,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+
+  strengthBar: (strength) => ({
+    height: "100%",
+    borderRadius: 50,
+    width:
+      {
+        "Too Weak": 0,
+        Weak: 0.25,
+        Moderate: 0.5,
+        Strong: 0.75,
+        "Very Strong": 1,
+      }[strength] *
+        100 +
+      "%",
+    backgroundColor: {
+      "Too Weak": "#FF4C4C",
+      Weak: "#FF854C",
+      Moderate: "#F9CE42",
+      Strong: "#46D369",
+      "Very Strong": "#2DFF9E",
+    }[strength],
+  }),
+
+  errorBorder: {
+    borderColor: "#FF4C4C",
+  },
+  
 });

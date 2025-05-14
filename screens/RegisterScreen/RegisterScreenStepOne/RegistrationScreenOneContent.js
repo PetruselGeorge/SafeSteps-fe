@@ -11,9 +11,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import ConfirmPasswordFeedback from "../components/ConfirmPasswordFeedback";
 import PasswordInput from "../components/PasswordInput";
-import PasswordValidationView from "../components/PasswordValidationFeedback";
 import ConfirmPasswordInput from "../components/ConfirmPasswordInput";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import PasswordStrengthBar from "../components/PasswordStrenghtBar";
 const RegistrationScreenOneContent = ({
   formData,
   onChange,
@@ -28,13 +28,25 @@ const RegistrationScreenOneContent = ({
   setFocusedField,
   passwordValidation,
   emailValidation,
+  autofillHints,
+  passwordStrength,
+  suggestions,
+  emailTaken,
+  emailError,
+  passwordError,
+  confirmPwError,
+  touched,
 }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        style={styles.container}
+        extraScrollHeight={20}
+      >
         <TouchableOpacity style={styles.backButton} onPress={onBack}>
           <Ionicons name="arrow-back" size={24} color="white" />
           <Text style={styles.backText}>Back</Text>
@@ -50,7 +62,7 @@ const RegistrationScreenOneContent = ({
               style={styles.icon}
             />
             <TextInput
-              style={styles.inputField}
+              style={styles.inputFieldName}
               placeholder="First Name"
               placeholderTextColor="white"
               value={formData.firstName}
@@ -66,7 +78,7 @@ const RegistrationScreenOneContent = ({
               style={styles.icon}
             />
             <TextInput
-              style={styles.inputField}
+              style={styles.inputFieldName}
               placeholder="Last Name"
               placeholderTextColor="white"
               value={formData.lastName}
@@ -74,7 +86,9 @@ const RegistrationScreenOneContent = ({
             />
           </View>
 
-          <View style={styles.inputWithIcon}>
+          <View
+            style={[styles.inputWithIcon, emailError && styles.errorBorder]}
+          >
             <Ionicons
               name="mail-outline"
               size={20}
@@ -94,13 +108,15 @@ const RegistrationScreenOneContent = ({
             />
           </View>
 
-          {focusedField === "email" && (
+          {touched.email && focusedField === "email" && (
             <View style={styles.validationBox}>
-              <Text
-                style={{ color: emailValidation.isEmail ? "green" : "red" }}
-              >
-                Valid email address.
-              </Text>
+              {!emailValidation.isEmail ? (
+                <Text style={{ color: "red" }}>Invalid e-mail format</Text>
+              ) : emailTaken ? (
+                <Text style={{ color: "red" }}>E-mail already in use</Text>
+              ) : (
+                <Text style={{ color: "green" }}>E-mail is available</Text>
+              )}
             </View>
           )}
 
@@ -117,13 +133,27 @@ const RegistrationScreenOneContent = ({
             }}
             showPassword={showPassword}
             toggleVisibility={() => setShowPassword(!showPassword)}
-            placeholder="Password"
+            placeholder="password"
             onFocus={() => setFocusedField("password")}
             onBlur={() => setFocusedField(null)}
+            autofillHints={autofillHints}
+            passwordError={passwordError}
           />
 
-          {focusedField === "password" && (
-            <PasswordValidationView validation={passwordValidation} />
+          {touched.password && focusedField === "password" && (
+            <>
+              <PasswordStrengthBar strength={passwordStrength} />
+
+              {passwordStrength !== "Very Strong" && suggestions.length > 0 && (
+                <View style={styles.validationBox}>
+                  {suggestions.map((s, i) => (
+                    <Text key={i} style={{ color: "red" }}>
+                      {s}
+                    </Text>
+                  ))}
+                </View>
+              )}
+            </>
           )}
 
           <ConfirmPasswordInput
@@ -135,13 +165,18 @@ const RegistrationScreenOneContent = ({
             }
             onFocus={() => setFocusedField("confirmPassword")}
             onBlur={() => setFocusedField(null)}
+            placeholder="confirm password"
+            autofillHints={autofillHints}
+            confirmPwError={confirmPwError}
           />
 
-          <ConfirmPasswordFeedback
-            visible={focusedField === "confirmPassword"}
-            password={formData.password}
-            confirmPassword={formData.confirmPassword}
-          />
+          {touched.confirmPassword && focusedField === "confirmPassword" && (
+            <ConfirmPasswordFeedback
+              visible={true}
+              password={formData.password}
+              confirmPassword={formData.confirmPassword}
+            />
+          )}
 
           <TouchableOpacity
             style={[styles.button, !isValid && styles.buttonDisabled]}
@@ -151,7 +186,7 @@ const RegistrationScreenOneContent = ({
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </KeyboardAvoidingView>
   );
 };
