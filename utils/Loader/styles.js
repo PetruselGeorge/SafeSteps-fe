@@ -1,15 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(0, 0, 0)",
+    fontSize:125
   },
-
   animation: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
   },
 });

@@ -1,12 +1,15 @@
-import React from 'react';
-import { View, } from 'react-native';
-import LottieView from 'lottie-react-native';
-import styles from './styles';
+// Loader.js
+import React from "react";
+import { View } from "react-native";
+import LottieView from "lottie-react-native";
+import styles from "./styles"
+import animationData from "../../assets/animations/safesteps_loader.json";
+
 const Loader = () => {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require('../../assets/animations/safesteps_loader.json')}
+        source={animationData}
         autoPlay
         loop
         style={styles.animation}
@@ -14,6 +17,5 @@ const Loader = () => {
     </View>
   );
 };
-
 
 export default Loader;

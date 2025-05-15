@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RegistrationScreenOneContent from "./RegistrationScreenOneContent";
 import { useNavigation } from "@react-navigation/native";
 import Loader from "../../../utils/Loader/Loader";
 import { Platform } from "react-native";
 import { checkEmailExists } from "../AuthApi/api";
-import { useCallback } from "react";
 import debounce from "lodash.debounce";
+
 const RegistrationScreenOne = () => {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
@@ -18,14 +18,9 @@ const RegistrationScreenOne = () => {
     hasSpecialChar: false,
     hasUpperLetter: false,
   });
-
   const [passwordStrength, setPasswordStrength] = useState("Too Weak");
   const [suggestions, setSuggestions] = useState([]);
-
-  const [emailValidation, setEmailValidation] = useState({
-    isEmail: false,
-  });
-
+  const [emailValidation, setEmailValidation] = useState({ isEmail: false });
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -33,14 +28,13 @@ const RegistrationScreenOne = () => {
     password: "",
     confirmPassword: "",
   });
-
   const [emailTaken, setEmailTaken] = useState(false);
-
   const [touched, setTouched] = useState({
     email: false,
     password: false,
     confirmPassword: false,
   });
+  const [loading, setLoading] = useState(false);
 
   const validatePassword = (pwd) => {
     const rules = {
@@ -124,7 +118,11 @@ const RegistrationScreenOne = () => {
 
   const handleNext = () => {
     if (isValid) {
-      navigation.navigate("RegistrationScreenTwo", formData);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate("RegistrationScreenTwo", formData);
+      }, 1200);
     }
   };
 
@@ -132,41 +130,19 @@ const RegistrationScreenOne = () => {
     navigation.goBack();
   };
 
-  const onChangeText = (text) => {
-    if (text.length > formData.password.length + 3) {
-      setShowPassword(false);
-      setTimeout(() => {
-        setShowPassword(true);
-      }, 10);
-    }
-    onChange("password", text);
-  };
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, []);
-
   const autofillHints = Platform.select({
     android: { importantForAutofill: "yes" },
     default: {},
   });
 
-  const emailError =
-    (touched.email && !emailValidation.isEmail) || emailTaken;
-
+  const emailError = (touched.email && !emailValidation.isEmail) || emailTaken;
   const passwordError = touched.password && passwordStrength !== "Very Strong";
-
   const confirmPwError =
     touched.confirmPassword &&
     formData.confirmPassword.length > 0 &&
     formData.confirmPassword !== formData.password;
 
-  return isLoading ? (
+  return loading ? (
     <Loader />
   ) : (
     <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
@@ -184,7 +160,6 @@ const RegistrationScreenOne = () => {
         setFocusedField={setFocusedField}
         passwordValidation={passwordValidation}
         emailValidation={emailValidation}
-        onChangeText={onChangeText}
         autofillHints={autofillHints}
         passwordStrength={passwordStrength}
         suggestions={suggestions}

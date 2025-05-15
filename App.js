@@ -5,7 +5,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegistrationScreenTwo from "./screens/RegisterScreen/RegisterScreenStepTwo/RegistrationScreenTwo";
 import { PaperProvider } from "react-native-paper";
-
 const Stack = createNativeStackNavigator();
 
 const App = () => (

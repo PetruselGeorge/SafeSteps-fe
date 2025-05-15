@@ -1,4 +1,3 @@
-// RegistrationScreenTwoContent.js
 import React from "react";
 import {
   View,
@@ -6,66 +5,134 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
+  ScrollView,
 } from "react-native";
-import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
-
+import DropDownPicker from "react-native-dropdown-picker";
+import {
+  KeyboardAwareFlatList,
+  KeyboardAwareScrollView,
+} from "react-native-keyboard-aware-scroll-view";
+import styles from "./styles";
+import { FlatList } from "react-native";
 const RegistrationScreenTwoContent = ({
   formData,
   onChange,
   onFinish,
-  onSkip,
   onBack,
+  canFinish,
+  countryValue,
+  cityValue,
+  countryItems,
+  cityItems,
+  onCountryChange,
+  onCityChange,
+  citySearch,
+  onCitySearch,
+  countryOpen,
+  setCountryOpen,
+  cityOpen,
+  setCityOpen,
+  loadingCities,
 }) => (
   <KeyboardAvoidingView
     behavior={Platform.OS === "ios" ? "padding" : "height"}
     style={{ flex: 1 }}
   >
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={onBack}>
         <Ionicons name="arrow-back" size={24} color="white" />
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>Complete your profile (optional)</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Complete your profile (optional)</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        placeholderTextColor="white"
-        value={formData.address}
-        onChangeText={(t) => onChange("address", t)}
-      />
+        <DropDownPicker
+          open={countryOpen}
+          setOpen={(isOpen) => {
+            setCountryOpen(isOpen);
+            if (isOpen) setCityOpen(false);
+          }}
+          value={formData.country}
+          setValue={(callback) => {
+            const val =
+              typeof callback === "function"
+                ? callback(formData.country)
+                : callback;
+            onCountryChange(val);
+            setCountryOpen(false);
+          }}
+          items={countryItems}
+          searchable
+          placeholder="Select country"
+          listMode="SCROLLVIEW"
+          zIndex={3000}
+          zIndexInverse={1000}
+          style={{ marginBottom: 16 }}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="City"
-        placeholderTextColor="white"
-        value={formData.city}
-        onChangeText={(t) => onChange("city", t)}
-      />
+        <View>
+          <TextInput
+            placeholder="Search city (min 3 characters)"
+            value={citySearch}
+            onChangeText={onCitySearch}
+            style={{
+              borderWidth: 1,
+              borderColor: "#ddd",
+              padding: 10,
+              borderRadius: 5,
+              marginBottom: 10,
+              backgroundColor: "#f9f9f9",
+            }}
+          />
+          {cityItems.length > 0 && (
+            <FlatList
+              data={cityItems}
+              keyExtractor={(item) => item.key}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => onCityChange(item.label)}
+                  style={{
+                    padding: 10,
+                    borderBottomWidth: 1,
+                    borderColor: "#ddd",
+                  }}
+                >
+                  <Text>{item.label}</Text>
+                </TouchableOpacity>
+              )}
+              style={{
+                maxHeight: 200,
+                backgroundColor: "#fff",
+                borderRadius: 5,
+              }}
+            />
+          )}
+        </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Country"
-        placeholderTextColor="white"
-        value={formData.country}
-        onChangeText={(t) => onChange("country", t)}
-      />
+        <View style={styles.inputWithIcon}>
+          <Ionicons
+            name="home-outline"
+            size={20}
+            color="white"
+            style={styles.icon}
+          />
+          <TextInput
+            style={styles.inputField}
+            placeholder="Address"
+            placeholderTextColor="white"
+            value={formData.address}
+            onChangeText={(t) => onChange("address", t)}
+          />
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={onFinish}>
-        <Text style={styles.buttonText}>Finish</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={onSkip}>
-        <Text style={styles.skipText}>Skip for now</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.button} onPress={onFinish}>
+          <Text style={styles.buttonText}>Finish</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   </KeyboardAvoidingView>
 );
 

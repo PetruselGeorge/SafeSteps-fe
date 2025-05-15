@@ -51,6 +51,7 @@ const RegistrationScreenOneContent = ({
           <Ionicons name="arrow-back" size={24} color="white" />
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
+        
         <View style={styles.card}>
           <Text style={styles.title}>Create your account</Text>
 
@@ -133,7 +134,7 @@ const RegistrationScreenOneContent = ({
             }}
             showPassword={showPassword}
             toggleVisibility={() => setShowPassword(!showPassword)}
-            placeholder="password"
+            placeholder="Password"
             onFocus={() => setFocusedField("password")}
             onBlur={() => setFocusedField(null)}
             autofillHints={autofillHints}
@@ -165,7 +166,7 @@ const RegistrationScreenOneContent = ({
             }
             onFocus={() => setFocusedField("confirmPassword")}
             onBlur={() => setFocusedField(null)}
-            placeholder="confirm password"
+            placeholder="Confirm Password"
             autofillHints={autofillHints}
             confirmPwError={confirmPwError}
           />

@@ -3,11 +3,22 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     paddingLeft: 25,
     paddingRight: 25,
     paddingTop: 60,
     backgroundColor: "rgb(20,31,41)",
+  },
+
+  card: {
+    backgroundColor: "rgba(55, 75, 95, 0.29)",
+    borderRadius: 15,
+    borderColor: "rgba(219, 226, 233, 0.29)",
+    borderWidth: 1,
+    shadowColor: "rgba(219, 226, 233, 0.29)",
+    shadowRadius: 30,
+    padding: 15,
+    marginTop: 50,
   },
 
   backButton: {
@@ -15,6 +26,13 @@ export default StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
+
+  backText: {
+    fontSize: 16,
+    marginLeft: 6,
+    color: "rgb(255,255,255)",
+  },
+
   backText: {
     fontSize: 16,
     marginLeft: 6,
@@ -49,7 +67,9 @@ export default StyleSheet.create({
     marginBottom: 16,
     height: 48,
   },
+
   icon: { marginRight: 10 },
+
   inputField: { flex: 1, color: "white" },
 
   button: {
@@ -59,6 +79,7 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+
   buttonText: {
     color: "#fff",
     fontSize: 18,
@@ -70,5 +91,16 @@ export default StyleSheet.create({
     textAlign: "center",
     marginTop: 16,
   },
+
+  validationBox: {
+    backgroundColor: "#f9f9f9",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+
 
 });
