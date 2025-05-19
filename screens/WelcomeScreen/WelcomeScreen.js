@@ -1,5 +1,7 @@
+// src/screens/WelcomeScreen/WelcomeScreen.js
+
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Asset } from "expo-asset";
 import Loader from "../../utils/Loader/Loader";
 import WelcomeContent from "./WelcomeContent";
@@ -14,8 +16,10 @@ const cupImage = require("../../assets/homepage/homepage-cup.png");
 const WelcomeScreen = () => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const navigation = useNavigation();
+
   useEffect(() => {
     const loadAssets = async () => {
+      console.log("[WelcomeScreen] Loading assets...");
       await Asset.loadAsync([
         backgroundImage,
         pinpointImage,
@@ -29,13 +33,18 @@ const WelcomeScreen = () => {
     loadAssets();
   }, []);
 
-  if (!assetsLoaded) {
-    return <Loader />;
-  }
-
   const handleNext = () => {
     navigation.navigate("RegistrationScreenOne");
   };
+
+  const handleLogin = () => {
+    console.log("[WelcomeScreen] Navigating to LoginScreen...");
+    navigation.navigate("LoginScreen");
+  };
+
+  if (!assetsLoaded) {
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
@@ -46,6 +55,7 @@ const WelcomeScreen = () => {
         safetyImage={safetyImage}
         cupImage={cupImage}
         handleNext={handleNext}
+        handleLogin={handleLogin}
       />
     </SafeAreaView>
   );

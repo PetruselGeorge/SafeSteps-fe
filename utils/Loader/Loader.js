@@ -2,7 +2,7 @@
 import React from "react";
 import { View } from "react-native";
 import LottieView from "lottie-react-native";
-import styles from "./styles"
+import styles from "./styles";
 import animationData from "../../assets/animations/safesteps_loader.json";
 
 const Loader = () => {

@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Snackbar } from "react-native-paper";
 import { Country, City } from "country-state-city";
 import RegistrationScreenTwoContent from "./RegistrationScreenTwoContent";
-import Loader from "../../../utils/Loader/Loader";
-import { registerUser } from "../AuthApi/api";
+import Loader from "../../../../utils/Loader/Loader";
+import { registerUser } from "../../AuthApi/api";
 const RegistrationScreenTwo = () => {
   const navigation = useNavigation();
   const { params } = useRoute();
@@ -78,7 +77,7 @@ const RegistrationScreenTwo = () => {
   const onCountryChange = useCallback(
     (countryCode) => {
       setFormData((prev) => ({ ...prev, country: countryCode, city: "" }));
-      setCitySearch(""); // Resetează căutarea
+      setCitySearch("");
       loadCities(countryCode);
     },
     [loadCities]
@@ -121,13 +120,24 @@ const RegistrationScreenTwo = () => {
 
   const toDash = (v) => (v.trim() === "" ? "-" : v.trim());
 
-  const onFinish = () =>
-    saveUser({
-      ...formData,
-      address: toDash(formData.address),
-      city: toDash(formData.city),
-      country: toDash(formData.country),
-    });
+  const onFinish = async () => {
+    try {
+      setSending(true);
+      await saveUser({
+        ...params,
+        address: toDash(formData.address),
+        city: toDash(formData.city),
+        country: toDash(formData.country),
+        packageType: "BASIC",
+      });
+
+      navigation.navigate("RegisterSuccess");
+    } catch (error) {
+      console.error("Error saving user:", error);
+    } finally {
+      setSending(false);
+    }
+  };
 
   const handleBack = () => navigation.goBack();
 

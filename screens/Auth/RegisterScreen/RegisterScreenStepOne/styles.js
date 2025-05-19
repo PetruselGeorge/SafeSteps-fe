@@ -164,5 +164,4 @@ export default StyleSheet.create({
   errorBorder: {
     borderColor: "#FF4C4C",
   },
-  
 });

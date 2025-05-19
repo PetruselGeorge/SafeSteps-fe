@@ -12,10 +12,12 @@ const ConfirmPasswordInput = ({
   onBlur,
   placeholder,
   autofillHints = {},
-  confirmPwError
+  confirmPwError,
 }) => {
   return (
-    <View style={[styles.passwordContainer, confirmPwError && styles.errorBorder ]}>
+    <View
+      style={[styles.passwordContainer, confirmPwError && styles.errorBorder]}
+    >
       <Ionicons
         name="lock-closed-outline"
         size={20}

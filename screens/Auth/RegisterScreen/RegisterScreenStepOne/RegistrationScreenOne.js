@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RegistrationScreenOneContent from "./RegistrationScreenOneContent";
 import { useNavigation } from "@react-navigation/native";
-import Loader from "../../../utils/Loader/Loader";
+
+import Loader from "../../../../utils/Loader/Loader";
 import { Platform } from "react-native";
-import { checkEmailExists } from "../AuthApi/api";
+import { checkEmailExists } from "../../AuthApi/api";
 import debounce from "lodash.debounce";
 
 const RegistrationScreenOne = () => {

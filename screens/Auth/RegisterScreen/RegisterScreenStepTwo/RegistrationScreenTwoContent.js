@@ -48,7 +48,6 @@ const RegistrationScreenTwoContent = ({
 
       <View style={styles.card}>
         <Text style={styles.title}>Complete your profile (optional)</Text>
-
         <DropDownPicker
           open={countryOpen}
           setOpen={(isOpen) => {
@@ -70,22 +69,22 @@ const RegistrationScreenTwoContent = ({
           listMode="SCROLLVIEW"
           zIndex={3000}
           zIndexInverse={1000}
-          style={{ marginBottom: 16 }}
+          style={styles.dropContainer}
+          textStyle={styles.dropText}
+          placeholderStyle={styles.dropPlaceholder}
+          dropDownContainerStyle={styles.dropdownItem}
+          selectedItemContainerStyle={styles.dropSelectedItem}
+          searchContainerStyle={styles.searchContainer}
+          searchTextInputStyle={styles.searchTextInput}
         />
 
-        <View>
+        <View style={styles.flInputContainer}>
           <TextInput
             placeholder="Search city (min 3 characters)"
             value={citySearch}
             onChangeText={onCitySearch}
-            style={{
-              borderWidth: 1,
-              borderColor: "#ddd",
-              padding: 10,
-              borderRadius: 5,
-              marginBottom: 10,
-              backgroundColor: "#f9f9f9",
-            }}
+            placeholderTextColor="#E9C46A"
+            style={styles.flInputField}
           />
           {cityItems.length > 0 && (
             <FlatList
@@ -94,20 +93,12 @@ const RegistrationScreenTwoContent = ({
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => onCityChange(item.label)}
-                  style={{
-                    padding: 10,
-                    borderBottomWidth: 1,
-                    borderColor: "#ddd",
-                  }}
+                  style={styles.flListItem}
                 >
-                  <Text>{item.label}</Text>
+                  <Text style={styles.flListItemText}>{item.label}</Text>
                 </TouchableOpacity>
               )}
-              style={{
-                maxHeight: 200,
-                backgroundColor: "#fff",
-                borderRadius: 5,
-              }}
+              style={styles.flListContainer}
             />
           )}
         </View>

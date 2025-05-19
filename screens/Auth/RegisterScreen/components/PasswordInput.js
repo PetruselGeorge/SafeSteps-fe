@@ -12,11 +12,9 @@ const PasswordInput = ({
   onFocus,
   onBlur,
   autofillHints = {},
-  passwordError
+  passwordError,
 }) => (
-  <View
-    style={[styles.passwordContainer, passwordError && styles.errorBorder]}
-  >
+  <View style={[styles.passwordContainer, passwordError && styles.errorBorder]}>
     <Ionicons
       name="lock-closed-outline"
       size={20}

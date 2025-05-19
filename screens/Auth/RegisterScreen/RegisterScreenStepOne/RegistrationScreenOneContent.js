@@ -51,7 +51,7 @@ const RegistrationScreenOneContent = ({
           <Ionicons name="arrow-back" size={24} color="white" />
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
-        
+
         <View style={styles.card}>
           <Text style={styles.title}>Create your account</Text>
 

@@ -1,4 +1,3 @@
-// screens/Registration/styles.js
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -9,7 +8,6 @@ export default StyleSheet.create({
     paddingTop: 60,
     backgroundColor: "rgb(20,31,41)",
   },
-
   card: {
     backgroundColor: "rgba(55, 75, 95, 0.29)",
     borderRadius: 15,
@@ -20,25 +18,6 @@ export default StyleSheet.create({
     padding: 15,
     marginTop: 50,
   },
-
-  backButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  backText: {
-    fontSize: 16,
-    marginLeft: 6,
-    color: "rgb(255,255,255)",
-  },
-
-  backText: {
-    fontSize: 16,
-    marginLeft: 6,
-    color: "rgb(255,255,255)",
-  },
-
   title: {
     fontSize: 26,
     fontWeight: "bold",
@@ -46,17 +25,6 @@ export default StyleSheet.create({
     color: "rgb(255,255,255)",
     textAlign: "center",
   },
-
-  input: {
-    borderWidth: 1,
-    borderColor: "rgb(255,255,255)",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-    color: "white",
-  },
-
   inputWithIcon: {
     flexDirection: "row",
     alignItems: "center",
@@ -67,11 +35,13 @@ export default StyleSheet.create({
     marginBottom: 16,
     height: 48,
   },
-
-  icon: { marginRight: 10 },
-
-  inputField: { flex: 1, color: "white" },
-
+  icon: {
+    marginRight: 10,
+  },
+  inputField: {
+    flex: 1,
+    color: "white",
+  },
   button: {
     backgroundColor: "rgb(28, 125, 186)",
     paddingVertical: 16,
@@ -79,28 +49,14 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
   },
-
-  skipText: {
-    color: "#aaa",
-    textAlign: "center",
-    marginTop: 16,
-  },
-
-  validationBox: {
-    backgroundColor: "#f9f9f9",
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 8,
+  errorText: {
+    color: "#FF4C4C",
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#ddd",
+    textAlign: "center",
   },
-
-
 });
