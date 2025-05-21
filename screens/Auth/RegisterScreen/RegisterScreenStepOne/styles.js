@@ -6,7 +6,7 @@ export default StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 25,
     paddingTop: 60,
-    backgroundColor: "rgb(20,31,41)",
+    backgroundColor: "rgb(22, 34, 51)",
   },
   card: {
     backgroundColor: "rgba(55, 75, 95, 0.29)",

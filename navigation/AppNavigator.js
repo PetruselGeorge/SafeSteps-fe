@@ -12,19 +12,17 @@ import WelcomeBack from "../screens/Auth/WelcomeBack/WelcomeBack";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { isAuthenticated, loading } = useAuth();
-
+  const { isAuthenticated, loading, showWelcomeBack } = useAuth();  
   if (loading) {
     return <Loader />;
   }
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {isAuthenticated ? (
-        <>
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="WelcomeBack" component={WelcomeBack} />
-        </>
+      {showWelcomeBack ? (
+        <Stack.Screen name="WelcomeBack" component={WelcomeBack} />
+      ) : isAuthenticated ? (
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
       ) : (
         <>
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />

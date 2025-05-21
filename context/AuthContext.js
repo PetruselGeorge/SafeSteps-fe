@@ -1,6 +1,5 @@
-// src/context/AuthContext.js
 
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, use } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, validateOrRefreshToken } from "../screens/Auth/AuthApi/api";
 import { navigationRef, reset } from "../navigation/NavigationService";
@@ -11,23 +10,16 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [authChecked, setAuthChecked] = useState(false);
+  const [showWelcomeBack, setShowWelcomeBack] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const isValid = await validateOrRefreshToken();
         if (isValid) {
-          console.log("[Auth] Token is valid. Navigating to HomeScreen...");
+          console.log("[Auth] Token is valid. Showing WelcomeBack...");
           setIsAuthenticated(true);
-          const interval = setInterval(() => {
-            if (navigationRef.isReady()) {
-              reset(0, [{ name: "HomeScreen" }]);
-              clearInterval(interval);
-            } else {
-              console.warn("[Auth] Navigator not ready, will retry...");
-            }
-          }, 100);
+          setShowWelcomeBack(true);
         } else {
           console.log("[Auth] No valid token. Showing WelcomeScreen...");
           setIsAuthenticated(false);
@@ -84,7 +76,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, loading, error }}
+      value={{
+        isAuthenticated,
+        login,
+        logout,
+        loading,
+        error,
+        showWelcomeBack,
+        setShowWelcomeBack,
+      }}
     >
       {children}
     </AuthContext.Provider>

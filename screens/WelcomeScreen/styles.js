@@ -82,4 +82,14 @@ export default StyleSheet.create({
     fontSize: 15,
     color: "white",
   },
+  fullScreenStars: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "50%",
+    zIndex: 1, 
+    backgroundColor: "transparent",
+    pointerEvents: "none",
+  },
 });

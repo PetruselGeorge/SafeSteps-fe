@@ -36,9 +36,7 @@ const RegistrationScreenTwoContent = ({
   setCityOpen,
   loadingCities,
 }) => (
-  <View
-    style={{ flex: 1 }}
-  >
+  <View style={{ flex: 1 }}>
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={onBack}>
         <Ionicons name="arrow-back" size={24} color="white" />
@@ -66,6 +64,7 @@ const RegistrationScreenTwoContent = ({
           searchable
           placeholder="Select country"
           listMode="SCROLLVIEW"
+          placeholderTextColor="white"
           zIndex={3000}
           zIndexInverse={1000}
           style={styles.dropContainer}
@@ -82,7 +81,7 @@ const RegistrationScreenTwoContent = ({
             placeholder="Search city (min 3 characters)"
             value={citySearch}
             onChangeText={onCitySearch}
-            placeholderTextColor="#E9C46A"
+            placeholderTextColor="white"
             style={styles.flInputField}
           />
           {cityItems.length > 0 && (

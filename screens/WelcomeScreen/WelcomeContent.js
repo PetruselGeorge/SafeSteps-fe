@@ -1,7 +1,8 @@
-import React from "react";
 import { ImageBackground, Text, View, TouchableOpacity } from "react-native";
 import * as Animatable from "react-native-animatable";
 import styles from "./styles";
+import LottieView from "lottie-react-native";
+import { useEffect, useRef } from "react";
 
 const rotatingBounce = {
   0: {
@@ -21,6 +22,8 @@ const rotatingBounce = {
   },
 };
 
+const starsAnimation = require("../../assets/animations/stars.json");
+
 const WelcomeContent = ({
   backgroundImage,
   pinpointImage,
@@ -30,6 +33,19 @@ const WelcomeContent = ({
   handleNext,
   handleLogin,
 }) => {
+  const starsRef = useRef(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (starsRef.current) {
+        starsRef.current.play();
+        console.log("[Stars] Animation started");
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <ImageBackground
       source={backgroundImage}
@@ -48,7 +64,14 @@ const WelcomeContent = ({
       />
 
       <View style={styles.overlay} />
-
+      <LottieView
+        ref={starsRef}
+        source={starsAnimation}
+        autoPlay={false}
+        loop={true}
+        pointerEvents="none"
+        style={[styles.fullScreenStars, { transform: [{ scale: 2.5 }] }]}
+      />
       <Animatable.Text animation="fadeInDown" delay={500} style={styles.text}>
         SafeSteps
       </Animatable.Text>

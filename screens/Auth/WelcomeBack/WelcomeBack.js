@@ -5,12 +5,15 @@ import styles from "./styles";
 import * as Animatable from "react-native-animatable";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LottieView from "lottie-react-native";
+import { useAuth } from "../../../context/AuthContext";
+import { navigationRef, reset} from "../../../navigation/NavigationService";
 
 const backgroundImage = require("../../../assets/welcomebackpage/welcomeback-background.png");
-const fireworksAnimation = require("../../../assets/animations/fireworks.json");
+const starsAnimation = require("../../../assets/animations/stars.json");
 const WelcomeBack = ({ onAnimationEnd }) => {
   const textRef = useRef(null);
-  const fireworksRef = useRef(null);
+  const starsRef = useRef(null);
+  const { setShowWelcomeBack } = useAuth();
 
   useEffect(() => {
     if (textRef.current) {
@@ -18,11 +21,24 @@ const WelcomeBack = ({ onAnimationEnd }) => {
         setTimeout(() => {
           if (textRef.current) {
             textRef.current.animate("fadeOutUp", 800).then(() => {
-              if (fireworksRef.current) {
-                fireworksRef.current.play();
+              if (starsRef.current) {
+                starsRef.current.play();
               }
-            navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
-            }, 1000);
+
+              setShowWelcomeBack(false);
+
+              const interval = setInterval(() => {
+                if (navigationRef.isReady()) {
+                  console.log(
+                    "[WelcomeBack] Navigator ready. Redirecting to HomeScreen..."
+                  );
+                  reset(0, [{ name: "HomeScreen" }]);
+                  clearInterval(interval);
+                } else {
+                  console.log("[WelcomeBack] Navigator not ready yet...");
+                }
+              }, 100);
+            });
           }
         }, 1500);
       });
@@ -41,11 +57,11 @@ const WelcomeBack = ({ onAnimationEnd }) => {
         </Animatable.View>
 
         <LottieView
-          ref={fireworksRef}
-          source={fireworksAnimation}
-          autoPlay={false}
-          loop={false}
-          style={styles.fullScreenFireworks}
+          ref={starsRef}
+          source={starsAnimation}
+          autoPlay={true}
+          loop={true}
+          style={styles.fullScreenStars}
         />
       </ImageBackground>
     </SafeAreaView>
