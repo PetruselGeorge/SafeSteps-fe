@@ -21,8 +21,8 @@ const WelcomeBack = ({ onAnimationEnd }) => {
               if (fireworksRef.current) {
                 fireworksRef.current.play();
               }
-              setTimeout(onAnimationEnd, 1000);
-            });
+            navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
+            }, 1000);
           }
         }, 1500);
       });

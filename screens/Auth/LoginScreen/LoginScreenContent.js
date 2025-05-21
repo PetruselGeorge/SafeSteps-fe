@@ -13,14 +13,14 @@ import styles from "./styles";
 
 const LoginScreenContent = ({ formData, setFormData, error, onLogin }) => {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <View
       style={{ flex: 1 }}
+      e
     >
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         style={styles.container}
-        extraScrollHeight={20}
+        enableOnAndroid={true}
       >
         <View style={styles.card}>
           <Text style={styles.title}>Welcome Back</Text>
@@ -71,7 +71,7 @@ const LoginScreenContent = ({ formData, setFormData, error, onLogin }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

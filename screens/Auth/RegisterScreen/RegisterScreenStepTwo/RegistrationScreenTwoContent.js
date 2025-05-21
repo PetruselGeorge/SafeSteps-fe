@@ -36,8 +36,7 @@ const RegistrationScreenTwoContent = ({
   setCityOpen,
   loadingCities,
 }) => (
-  <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
+  <View
     style={{ flex: 1 }}
   >
     <View style={styles.container}>
@@ -124,7 +123,7 @@ const RegistrationScreenTwoContent = ({
         </TouchableOpacity>
       </View>
     </View>
-  </KeyboardAvoidingView>
+  </View>
 );
 
 export default RegistrationScreenTwoContent;

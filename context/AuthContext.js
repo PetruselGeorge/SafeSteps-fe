@@ -20,6 +20,14 @@ export const AuthProvider = ({ children }) => {
         if (isValid) {
           console.log("[Auth] Token is valid. Navigating to HomeScreen...");
           setIsAuthenticated(true);
+          const interval = setInterval(() => {
+            if (navigationRef.isReady()) {
+              reset(0, [{ name: "HomeScreen" }]);
+              clearInterval(interval);
+            } else {
+              console.warn("[Auth] Navigator not ready, will retry...");
+            }
+          }, 100);
         } else {
           console.log("[Auth] No valid token. Showing WelcomeScreen...");
           setIsAuthenticated(false);

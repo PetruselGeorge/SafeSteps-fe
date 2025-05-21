@@ -38,14 +38,14 @@ const RegistrationScreenOneContent = ({
   touched,
 }) => {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
+    <View style={{ flex: 1 }}>
+
       <KeyboardAwareScrollView
-        keyboardShouldPersistTaps="handled"
         style={styles.container}
-        extraScrollHeight={20}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={Platform.OS === "ios" ? 20 : 30}
       >
         <TouchableOpacity style={styles.backButton} onPress={onBack}>
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -54,7 +54,6 @@ const RegistrationScreenOneContent = ({
 
         <View style={styles.card}>
           <Text style={styles.title}>Create your account</Text>
-
           <View style={styles.inputWithIcon}>
             <Ionicons
               name="person-outline"
@@ -188,7 +187,7 @@ const RegistrationScreenOneContent = ({
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

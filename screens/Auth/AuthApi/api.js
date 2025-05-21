@@ -128,7 +128,7 @@ export async function refreshAccessToken() {
 
 export async function validateOrRefreshToken() {
   try {
-    const accessToken = await AsyncStorage.getItem("accessToken");
+    let accessToken = await AsyncStorage.getItem("accessToken");
 
     console.log("[Token] Access Token from Storage:", accessToken);
 
@@ -150,8 +150,15 @@ export async function validateOrRefreshToken() {
 
     if (payload.exp < now) {
       console.log("[Token] Token Expired Locally");
-      await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
-      return false;
+
+      const newAccessToken = await refreshAccessToken();
+      if (!newAccessToken) {
+        console.warn("[Token] Refresh failed. Clearing tokens...");
+        await AsyncStorage.multiRemove(["accessToken", "refreshToken"]);
+        return false;
+      }
+
+      accessToken = newAccessToken;
     }
 
     console.log("[Token] Token Not Expired, Sending Validation Request...");
