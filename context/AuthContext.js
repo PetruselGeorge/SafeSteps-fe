@@ -1,9 +1,8 @@
-
 import { createContext, useState, useEffect, useContext, use } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, validateOrRefreshToken } from "../screens/Auth/AuthApi/api";
 import { navigationRef, reset } from "../navigation/NavigationService";
-
+import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,11 +10,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showWelcomeBack, setShowWelcomeBack] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const isValid = await validateOrRefreshToken();
+        const token = await AsyncStorage.getItem("accessToken");
+        const decoded = jwtDecode(token);
+        setUser(decoded);
         if (isValid) {
           console.log("[Auth] Token is valid. Showing WelcomeBack...");
           setIsAuthenticated(true);
@@ -43,7 +46,8 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem("refreshToken", response.refreshToken);
 
       console.log("[Auth] Tokens Saved Successfully");
-
+      const decoded = jwtDecode(response.jwtToken);
+      setUser(decoded);
       setIsAuthenticated(true);
 
       const interval = setInterval(() => {
@@ -84,6 +88,7 @@ export const AuthProvider = ({ children }) => {
         error,
         showWelcomeBack,
         setShowWelcomeBack,
+        user
       }}
     >
       {children}

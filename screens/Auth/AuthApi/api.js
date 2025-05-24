@@ -5,6 +5,12 @@ const BASE_URL = API_URL;
 
 async function request(endpoint, method = "GET", body) {
   try {
+    const isValid = await validateOrRefreshToken();
+    if (!isValid)
+      throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+
+    const accessToken = await AsyncStorage.getItem("accessToken");
+
     const options = {
       method,
       headers: {
