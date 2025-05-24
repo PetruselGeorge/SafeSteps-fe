@@ -6,7 +6,8 @@ import * as Animatable from "react-native-animatable";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LottieView from "lottie-react-native";
 import { useAuth } from "../../../context/AuthContext";
-import { navigationRef, reset} from "../../../navigation/NavigationService";
+import { navigationRef, reset } from "../../../navigation/NavigationService";
+import { useFonts } from "expo-font";
 
 const backgroundImage = require("../../../assets/welcomebackpage/welcomeback-background.png");
 const starsAnimation = require("../../../assets/animations/stars.json");
@@ -44,6 +45,7 @@ const WelcomeBack = ({ onAnimationEnd }) => {
       });
     }
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container} edges={["left", "right"]}>

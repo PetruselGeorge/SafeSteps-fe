@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Buffer } from "buffer";
-const BASE_URL = "http://192.168.1.15:8080/api";
+import { API_URL } from "@env";
+const BASE_URL = API_URL;
 
 async function request(endpoint, method = "GET", body) {
   try {

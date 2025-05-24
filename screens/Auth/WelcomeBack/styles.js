@@ -36,4 +36,26 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
 
+  welcomeText: {
+ fontFamily: 'PoppinsBold',
+  fontSize: 28,
+  color: '#FFB300',
+  textAlign: 'center',
+  textShadowColor: 'rgba(0,0,0,0.8)',
+  textShadowOffset: { width: 2, height: 2 },
+  textShadowRadius: 4,
+  letterSpacing: 1.2,
+  },
+
+  subText: {
+  fontFamily: 'PoppinsLight',
+  fontSize: 16,
+  color: '#B0CDE8',
+  textAlign: 'center',
+  marginTop: 10,
+  textShadowColor: 'rgba(0,0,0,0.6)',
+  textShadowOffset: { width: 1, height: 1 },
+  textShadowRadius: 2,
+  lineHeight: 22,
+  },
 });
