@@ -3,11 +3,13 @@ import { Buffer } from "buffer";
 import { API_URL } from "@env";
 const BASE_URL = API_URL;
 
-async function request(endpoint, method = "GET", body) {
+async function request(endpoint, method = "GET", body, needsAuth = true) {
   try {
-    const isValid = await validateOrRefreshToken();
-    if (!isValid)
-      throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+    if (needsAuth) {
+      const isValid = await validateOrRefreshToken();
+      if (!isValid)
+        throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+    }
 
     const accessToken = await AsyncStorage.getItem("accessToken");
 
@@ -18,6 +20,10 @@ async function request(endpoint, method = "GET", body) {
         "Content-Type": "application/json",
       },
     };
+
+    if (needsAuth && accessToken) {
+      options.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
     if (body) options.body = JSON.stringify(body);
 
@@ -52,14 +58,14 @@ async function request(endpoint, method = "GET", body) {
 
 export async function registerUser(payload) {
   await AsyncStorage.setItem("registered", "true");
-  return request("/auth/register", "POST", payload);
+  return request("/auth/register", "POST", payload, false);
 }
 
 export async function loginUser(payload) {
   try {
     console.log("[Auth] Sending Login Request...", payload);
 
-    const response = await request("/auth/login", "POST", payload);
+    const response = await request("/auth/login", "POST", payload, false);
     console.log("[Auth] Raw Response:", response);
 
     if (!response.jwtToken || !response.refreshToken) {
@@ -197,5 +203,29 @@ export async function validateOrRefreshToken() {
 }
 
 export function checkEmailExists(email) {
-  return request(`/auth/check-email?email=${encodeURIComponent(email)}`, "GET");
+  return request(
+    `/auth/check-email?email=${encodeURIComponent(email)}`,
+    "GET",
+    null,
+    false
+  );
+}
+
+export async function authorizedFetch(url, fetchOptions = {}) {
+  const isValid = await validateOrRefreshToken();
+  if (!isValid) {
+    throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+  }
+
+  const accessToken = await AsyncStorage.getItem("accessToken");
+
+  const headers = {
+    ...(fetchOptions.headers || {}),
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  return fetch(`${BASE_URL}${url}`, {
+    ...fetchOptions,
+    headers,
+  });
 }

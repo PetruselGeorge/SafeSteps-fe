@@ -16,9 +16,17 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const isValid = await validateOrRefreshToken();
+
         const token = await AsyncStorage.getItem("accessToken");
-        const decoded = jwtDecode(token);
-        setUser(decoded);
+
+        if (token && token !== "null" && token !== "undefined") {
+          const decoded = jwtDecode(token);
+          setUser(decoded);
+        } else {
+          console.log("[Auth] Tokenul este gol sau invalid, nu se decodează.");
+          setUser(null);
+        }
+
         if (isValid) {
           console.log("[Auth] Token is valid. Showing WelcomeBack...");
           setIsAuthenticated(true);
@@ -30,6 +38,7 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error("[Auth] Error checking authentication:", error);
         setIsAuthenticated(false);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -69,14 +78,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
-    console.log("[Auth] Logging out...");
-    await AsyncStorage.removeItem("accessToken");
-    await AsyncStorage.removeItem("refreshToken");
-    setIsAuthenticated(false);
-    setLoading(false);
-    reset(0, [{ name: "WelcomeScreen" }]);
-  };
+const logout = async () => {
+  console.log("[Auth] Logging out...");
+  await AsyncStorage.removeItem("accessToken");
+  await AsyncStorage.removeItem("refreshToken");
+  setIsAuthenticated(false);
+  setLoading(false);
+  setUser(null);
+
+  const interval = setInterval(() => {
+    if (navigationRef.isReady()) {
+      console.log("[Auth] Navigator is ready. Resetting to WelcomeScreen...");
+      reset(0, [{ name: "WelcomeScreen" }]);
+      clearInterval(interval);
+    } else {
+      console.warn("[Auth] Navigator not ready, retrying reset...");
+    }
+  }, 100);
+};
 
   return (
     <AuthContext.Provider
@@ -88,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         error,
         showWelcomeBack,
         setShowWelcomeBack,
-        user
+        user,
       }}
     >
       {children}
