@@ -105,3 +105,38 @@ export async function updateTrailMainImage(
     throw error;
   }
 }
+
+export async function fetchTrailImageAsBase64WithAuth(mainImageUrl) {
+  const normalizedUrl = mainImageUrl.startsWith("/api")
+    ? mainImageUrl.replace("/api", "")
+    : mainImageUrl;
+
+  try {
+    const response = await authorizedFetch(normalizedUrl, {
+      method: "GET",
+    });
+
+    if (response.status === 404) {
+      return null; 
+    }
+
+    if (!response.ok) {
+      throw new Error(`Image fetch failed. Status: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      reader.onloadend = () => {
+        console.log("Base64 image loaded:", reader.result?.slice(0, 100));
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (err) {
+    console.error("[fetchTrailImageAsBase64WithAuth] Error:", err);
+    return null;
+  }
+}

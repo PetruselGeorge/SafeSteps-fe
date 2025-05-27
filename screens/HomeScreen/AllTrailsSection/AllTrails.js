@@ -19,14 +19,11 @@ export default function AllTrails({ newTrail }) {
     loadMore(0);
   }, []);
 
-
-
   const loadMore = async (pageToLoad = page) => {
     const currentPage = typeof pageToLoad === "number" ? pageToLoad : 0;
 
     if (loading || !hasMore) return;
     setLoading(true);
-
 
     try {
       const data = await getAllTrails(currentPage);

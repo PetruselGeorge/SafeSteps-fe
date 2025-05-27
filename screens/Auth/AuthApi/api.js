@@ -214,7 +214,7 @@ export function checkEmailExists(email) {
 export async function authorizedFetch(url, fetchOptions = {}) {
   const isValid = await validateOrRefreshToken();
   if (!isValid) {
-    throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+    throw new Error("Authentification expired. Please reconnect.");
   }
 
   const accessToken = await AsyncStorage.getItem("accessToken");
