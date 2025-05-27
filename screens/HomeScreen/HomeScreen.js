@@ -1,51 +1,76 @@
 import React, { useRef, useState } from "react";
-import { Button, ImageBackground } from "react-native";
-import * as Animatable from "react-native-animatable";
+import {
+  View,
+  Button,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  ImageBackground,
+} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import UploadTrailSection from "./UploadTrailSection/UploadTrailSection";
-import AllTrails from "./AllTrailsSection/AllTrails";
-import { SafeAreaView } from "react-native-safe-area-context";
+import TrailCard from "./AllTrailsSection/utils/TrailCard";
 import styles from "./styles";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getAllTrails } from "./TrailsApi/api";
+import * as Animatable from "react-native-animatable";
+import AllTrails from "./AllTrailsSection/AllTrails";
 
 const backgroundImage = require("../../assets/homescreen/homescreen-background.png");
 
-const HomeScreen = () => {
+export default function HomeScreen() {
   const { logout, user } = useAuth();
   const welcomeRef = useRef(null);
-  const [newTrail, setNewTrail] = useState(null);
 
-  const handleUploadSuccess = (trail) => {
-    setNewTrail(trail);
+  const [trails, setTrails] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+
+  const handleNewTrail = (trail) => {
+    setTrails((prev) => {
+      const alreadyExists = prev.some((t) => t.id === trail.id);
+      if (alreadyExists) return prev;
+      return [trail, ...prev];
+    });
+  };
+
+  const loadMore = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const data = await getAllTrails(page);
+      setTrails((prev) => [...prev, ...data.content]);
+      setPage((prev) => prev + 1);
+      setHasMore(!data.last);
+    } catch (err) {
+      console.error("Failed to load trails");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
-      <SafeAreaView style={styles.safeContainer} edges={["left", "right"]}>
-        <Animatable.View animation="fadeIn" duration={1000} style={styles.overlay}>
-          <Animatable.Text
-            ref={welcomeRef}
-            animation="fadeInDown"
-            duration={800}
-            style={styles.title}
-            onAnimationEnd={() => {
-              setTimeout(() => {
-                welcomeRef.current?.fadeOutUp(600);
-              }, 2000);
-            }}
-          >
-            Welcome {user?.firstName || "Back"}!
-          </Animatable.Text>
-
-          {user?.role === "ROLE_ADMIN" && (
-            <UploadTrailSection onUploadSuccess={handleUploadSuccess} />
-          )}
-
-          <AllTrails newTrail={newTrail} />
-          <Button title="Log Out" onPress={logout} color="#d9534f" />
-        </Animatable.View>
+    <ImageBackground
+      source={backgroundImage}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.overlay} edges={["left", "right"]}>
+        <AllTrails
+          user={user}
+          trails={trails}
+          setTrails={setTrails}
+          page={page}
+          setPage={setPage}
+          hasMore={hasMore}
+          setHasMore={setHasMore}
+          loading={loading}
+          setLoading={setLoading}
+          onNewTrail={handleNewTrail}
+        />
       </SafeAreaView>
     </ImageBackground>
   );
-};
-
-export default HomeScreen;
+}

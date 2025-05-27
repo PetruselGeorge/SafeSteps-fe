@@ -6,12 +6,18 @@ import styles from "./styles";
 import AllTrailsContent from "./AllTrailsContent";
 import * as ImagePicker from "expo-image-picker";
 
-export default function AllTrails({ newTrail }) {
-  const [trails, setTrails] = useState([]);
-  const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-
+export default function AllTrails({
+  user,
+  trails,
+  setTrails,
+  page,
+  setPage,
+  hasMore,
+  setHasMore,
+  loading,
+  setLoading,
+  onNewTrail,
+}) {
   useEffect(() => {
     setPage(0);
     setHasMore(true);
@@ -71,15 +77,6 @@ export default function AllTrails({ newTrail }) {
 
     setLoading(false);
   };
-  useEffect(() => {
-    if (newTrail && newTrail.id) {
-      setTrails((prev) => {
-        const alreadyExists = prev.some((t) => t.id === newTrail.id);
-        if (alreadyExists) return prev;
-        return [newTrail, ...prev];
-      });
-    }
-  }, [newTrail]);
 
   const updateTrailImageLocally = (trailId, newImageUri) => {
     setTrails((prev) =>
@@ -133,6 +130,8 @@ export default function AllTrails({ newTrail }) {
         loadMore={loadMore}
         loading={loading}
         handleUpdateImage={handleUpdateImage}
+        user={user}
+        onUploadSuccess={onNewTrail}
       />
     </View>
   );

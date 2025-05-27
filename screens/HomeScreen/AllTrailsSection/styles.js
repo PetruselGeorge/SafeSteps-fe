@@ -2,11 +2,11 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   sectionWrapper: {
-    paddingBottom: 20,
+    paddingBottom: 0,
     flexGrow: 1,
   },
   container: {
-    paddingVertical: 30,
+    paddingVertical: 0,
     paddingHorizontal: 30,
     backgroundColor: "transparent",
     flex: 1,
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 28,
-    marginTop: 12,
+    marginTop: 80,
     textTransform: "uppercase",
     letterSpacing: 1.5,
     textAlign: "center",

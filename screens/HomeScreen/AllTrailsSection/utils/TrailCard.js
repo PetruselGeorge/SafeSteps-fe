@@ -22,7 +22,7 @@ export default function TrailCard({ item, handleUpdateImage }) {
     return () => {
       isMounted = false;
     };
-  }, [item.mainImageUrl]);
+  }, [item.mainImageUrl, item.localMainImage]);
 
   const resolvedImage = item.localMainImage
     ? { uri: item.localMainImage }
