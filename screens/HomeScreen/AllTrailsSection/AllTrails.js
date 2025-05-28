@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
-import { getAllTrails, updateTrailMainImage } from "../TrailsApi/api";
+import {
+  getAllTrails,
+  searchTrailsWithFilters,
+  updateTrailMainImage,
+} from "../TrailsApi/api";
 import { Alert } from "react-native";
 import { View } from "react-native-animatable";
 import styles from "./styles";
 import AllTrailsContent from "./AllTrailsContent";
 import * as ImagePicker from "expo-image-picker";
+import SearchBar from "./utils/SearchBar/SearchBar";
+import { useDebounce } from "./utils/useDebounce";
 
 export default function AllTrails({
   user,
@@ -18,6 +24,13 @@ export default function AllTrails({
   setLoading,
   onNewTrail,
 }) {
+  
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 400);
+  const [isSearching, setIsSearching] = useState(false);
+  const [difficulty, setDifficulty] = useState("");
+  const [maxDistance, setMaxDistance] = useState("");
+
   useEffect(() => {
     setPage(0);
     setHasMore(true);
@@ -31,8 +44,18 @@ export default function AllTrails({
     if (loading || !hasMore) return;
     setLoading(true);
 
+    const fetchFunction = isSearching
+      ? () =>
+          searchTrailsWithFilters(
+            debouncedQuery.trim(),
+            maxDistance,
+            difficulty,
+            currentPage
+          )
+      : () => getAllTrails(currentPage);
+
     try {
-      const data = await getAllTrails(currentPage);
+      const data = await fetchFunction();
 
       if (Array.isArray(data.content)) {
         setTrails((prev) => {
@@ -48,9 +71,11 @@ export default function AllTrails({
       }
     } catch (err) {
       console.warn("First attempt failed, retrying in 1s...", err);
+
       setTimeout(async () => {
         try {
-          const retryData = await getAllTrails(currentPage);
+          const retryData = await fetchFunction();
+
           if (Array.isArray(retryData.content)) {
             setTrails((prev) => {
               const existingIds = new Set(prev.map((t) => t.id));
@@ -67,7 +92,7 @@ export default function AllTrails({
           }
         } catch (finalErr) {
           Alert.alert("Error", "Trails couldn't be loaded after retry.");
-          console.error("[TrailAPI Retry] Error fetching trails:", finalErr);
+          console.error("[Retry] Error fetching trails:", finalErr);
         } finally {
           setLoading(false);
         }
@@ -77,6 +102,40 @@ export default function AllTrails({
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    const search = async () => {
+      if (!debouncedQuery.trim() && !difficulty && !maxDistance) {
+        setIsSearching(false);
+        setPage(0);
+        setTrails([]);
+        setHasMore(true);
+        loadMore(0);
+        return;
+      }
+
+      setIsSearching(true);
+      setLoading(true);
+
+      try {
+        const result = await searchTrailsWithFilters(
+          debouncedQuery.trim(),
+          maxDistance,
+          difficulty,
+          0
+        );
+        setTrails(result.content || []);
+        setHasMore(!result.last);
+        setPage(1);
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    search();
+  }, [debouncedQuery, difficulty, maxDistance]);
 
   const updateTrailImageLocally = (trailId, newImageUri) => {
     setTrails((prev) =>
@@ -125,6 +184,15 @@ export default function AllTrails({
 
   return (
     <View style={styles.sectionWrapper}>
+      <SearchBar
+        query={query}
+        setQuery={setQuery}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        maxDistance={maxDistance}
+        setMaxDistance={setMaxDistance}
+      />
+
       <AllTrailsContent
         trails={trails}
         loadMore={loadMore}

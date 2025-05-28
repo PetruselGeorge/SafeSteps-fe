@@ -117,7 +117,7 @@ export async function fetchTrailImageAsBase64WithAuth(mainImageUrl) {
     });
 
     if (response.status === 404) {
-      return null; 
+      return null;
     }
 
     if (!response.ok) {
@@ -139,4 +139,45 @@ export async function fetchTrailImageAsBase64WithAuth(mainImageUrl) {
     console.error("[fetchTrailImageAsBase64WithAuth] Error:", err);
     return null;
   }
+}
+
+export async function searchTrailsWithFilters(
+  name = "",
+  maxDistance = "",
+  difficulty = "",
+  page = 0,
+  size = 10
+) {
+  const params = new URLSearchParams();
+  if (name !== "") params.append("name", name);
+  if (maxDistance !== "") params.append("maxDistance", maxDistance);
+  if (difficulty !== "") params.append("difficulty", difficulty);
+  params.append("page", page);
+  params.append("size", size);
+
+  const url = `/trails/search-with-filters?${params.toString()}`;
+
+  const response = await authorizedFetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const data = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  if (!response.ok) {
+    const error = new Error(
+      data?.message || "Failed to search trails with filters."
+    );
+    error.status = response.status;
+    error.details = data;
+    throw error;
+  }
+
+  return data;
 }

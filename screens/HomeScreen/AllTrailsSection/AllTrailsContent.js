@@ -1,7 +1,6 @@
 import styles from "./styles";
 import { FlatList, Text, View, ActivityIndicator } from "react-native";
 import TrailCard from "./utils/TrailCard";
-import * as Animatable from "react-native-animatable";
 import { useRef } from "react";
 import UploadTrailSection from "../UploadTrailSection/UploadTrailSection";
 export default function AllTrailsContent({
@@ -12,7 +11,6 @@ export default function AllTrailsContent({
   user,
   onUploadSuccess,
 }) {
-  const welcomeRef = useRef(null);
   const debounceTimeout = useRef(null);
 
   const renderHeader = () => (
