@@ -21,6 +21,7 @@ export default function FavoriteTrailsContent({
           handleUpdateImage={null}
           showRemoveButton={true}
           disableFavoriteToggle={true}
+          showAddedAt={true}
         />
       )}
       refreshing={refreshing}

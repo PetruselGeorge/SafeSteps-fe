@@ -42,24 +42,24 @@ export default StyleSheet.create({
   imageStyle: {
     resizeMode: "cover",
   },
-overlay: {
-  backgroundColor: "rgba(0, 0, 0, 0.4)",
-  paddingHorizontal: 16,
-  paddingVertical: 12,
-  height: "100%",
-  justifyContent: "center",
-},
-trailName: {
-  fontSize: 20,
-  fontWeight: "bold",
-  color: "#ffffff",
-  marginBottom: 6,
-},
-trailInfo: {
-  color: "#cccccc",
-  fontSize: 14,
-  lineHeight: 20,
-},
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    height: "100%",
+    justifyContent: "center",
+  },
+  trailName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginBottom: 6,
+  },
+  trailInfo: {
+    color: "#cccccc",
+    fontSize: 14,
+    lineHeight: 20,
+  },
   editIcon: {
     position: "absolute",
     top: 8,
@@ -75,12 +75,17 @@ trailInfo: {
     marginVertical: 16,
   },
   favoriteIcon: {
-  position: "absolute",
-  top: 8,
-  left: 8,
-  backgroundColor: "rgba(0,0,0,0.4)",
-  borderRadius: 20,
-  padding: 6,
-  zIndex: 10,
-},
+    position: "absolute",
+    top: 8,
+    left: 8,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderRadius: 20,
+    padding: 6,
+    zIndex: 10,
+  },
+  addedAt: {
+    color: "#A0CFFF",
+    fontSize: 13,
+    marginTop: 2,
+  },
 });

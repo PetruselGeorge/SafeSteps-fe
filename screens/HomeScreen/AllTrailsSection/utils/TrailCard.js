@@ -5,7 +5,7 @@ import * as Animatable from "react-native-animatable";
 import { ImageBackground, TouchableOpacity, Text } from "react-native";
 import styles from "../styles";
 import { Ionicons } from "@expo/vector-icons";
-
+import { navigate } from "../../../../navigation/NavigationService";
 export default function TrailCard({
   item,
   handleUpdateImage,
@@ -13,6 +13,7 @@ export default function TrailCard({
   toggleFavorite,
   showRemoveButton = false,
   disableFavoriteToggle = false,
+  showAddedAt = false,
 }) {
   const { user } = useAuth();
   const [imageUri, setImageUri] = useState(null);
@@ -37,62 +38,78 @@ export default function TrailCard({
     ? { uri: imageUri }
     : require("../../../../assets/trails/default-trail.png");
 
+  const handlePress = () => {
+    navigate("TrailInfo", { trail: item });
+  };
+
   return (
-    <Animatable.View animation="fadeIn" duration={500} style={styles.card}>
-      <ImageBackground
-        source={resolvedImage}
-        style={styles.imageBackground}
-        imageStyle={styles.imageStyle}
-      >
-        {disableFavoriteToggle ? (
-          <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={22}
-            color={isFavorite ? "#e74c3c" : "#ccc"}
-            style={styles.favoriteIcon}
-          />
-        ) : (
-          <TouchableOpacity
-            style={styles.favoriteIcon}
-            onPress={() => toggleFavorite(item.id)}
-          >
+    <TouchableOpacity onPress={handlePress}>
+      <Animatable.View animation="fadeIn" duration={500} style={styles.card}>
+        <ImageBackground
+          source={resolvedImage}
+          style={styles.imageBackground}
+          imageStyle={styles.imageStyle}
+        >
+          {disableFavoriteToggle ? (
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={22}
               color={isFavorite ? "#e74c3c" : "#ccc"}
+              style={styles.favoriteIcon}
             />
-          </TouchableOpacity>
-        )}
+          ) : (
+            <TouchableOpacity
+              style={styles.favoriteIcon}
+              onPress={() => toggleFavorite(item.id)}
+            >
+              <Ionicons
+                name={isFavorite ? "heart" : "heart-outline"}
+                size={22}
+                color={isFavorite ? "#e74c3c" : "#ccc"}
+              />
+            </TouchableOpacity>
+          )}
 
-        <Animatable.View
-          animation="fadeInUp"
-          duration={600}
-          style={styles.overlay}
-        >
-          <Text style={styles.trailName}>{item.name}</Text>
-          <Text style={styles.trailInfo}>Distance: {item.distanceKm} km</Text>
-          <Text style={styles.trailInfo}>Difficulty: {item.difficulty}</Text>
-        </Animatable.View>
-
-        {showRemoveButton ? (
-          <TouchableOpacity
-            style={styles.editIcon}
-            onPress={() => toggleFavorite(item.id)}
+          <Animatable.View
+            animation="fadeInUp"
+            duration={600}
+            style={styles.overlay}
           >
-            <Ionicons name="trash" size={20} color="white" />
-          </TouchableOpacity>
-        ) : (
-          user?.role === "ROLE_ADMIN" &&
-          handleUpdateImage && (
+            <Text style={styles.trailName}>{item.name}</Text>
+            <Text style={styles.trailInfo}>Distance: {item.distanceKm} km</Text>
+            <Text style={styles.trailInfo}>Difficulty: {item.difficulty}</Text>
+            <Text style={styles.trailInfo}>Location: {item.location}</Text>
+            {showAddedAt && item.addedAt && (
+              <Text style={styles.addedAt}>
+                Added:{" "}
+                {new Date(item.addedAt).toLocaleString("en-GB", {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                })}
+              </Text>
+            )}
+          </Animatable.View>
+
+          {showRemoveButton ? (
             <TouchableOpacity
               style={styles.editIcon}
-              onPress={() => handleUpdateImage(item.id)}
+              onPress={() => toggleFavorite(item.id)}
             >
-              <Ionicons name="camera" size={20} color="#A0CFFF" />
+              <Ionicons name="trash" size={20} color="white" />
             </TouchableOpacity>
-          )
-        )}
-      </ImageBackground>
-    </Animatable.View>
+          ) : (
+            user?.role === "ROLE_ADMIN" &&
+            handleUpdateImage && (
+              <TouchableOpacity
+                style={styles.editIcon}
+                onPress={() => handleUpdateImage(item.id)}
+              >
+                <Ionicons name="camera" size={20} color="#A0CFFF" />
+              </TouchableOpacity>
+            )
+          )}
+        </ImageBackground>
+      </Animatable.View>
+    </TouchableOpacity>
   );
 }
