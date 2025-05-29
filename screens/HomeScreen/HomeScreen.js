@@ -6,6 +6,7 @@ import {
   Text,
   ActivityIndicator,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import UploadTrailSection from "./UploadTrailSection/UploadTrailSection";
@@ -13,8 +14,9 @@ import TrailCard from "./AllTrailsSection/utils/TrailCard";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAllTrails } from "./TrailsApi/api";
-import * as Animatable from "react-native-animatable";
 import AllTrails from "./AllTrailsSection/AllTrails";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const backgroundImage = require("../../assets/homescreen/homescreen-background.png");
 
@@ -27,6 +29,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  const navigation = useNavigation();
 
   const handleNewTrail = (trail) => {
     setTrails((prev) => {
@@ -58,6 +61,12 @@ export default function HomeScreen() {
       resizeMode="cover"
     >
       <SafeAreaView style={styles.overlay} edges={["left", "right"]}>
+        <TouchableOpacity
+          onPress={() => navigation.openDrawer()}
+          style={styles.menuButton}
+        >
+          <Ionicons name="menu" size={28} color="#fff" />
+        </TouchableOpacity>
         <AllTrails
           user={user}
           trails={trails}

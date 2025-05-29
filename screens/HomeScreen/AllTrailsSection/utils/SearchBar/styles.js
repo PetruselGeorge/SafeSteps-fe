@@ -7,8 +7,9 @@ export default StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 55,
+    marginTop: 110,
     paddingHorizontal: 10,
+    marginBottom:20
   },
   icon: {
     marginRight: 8,

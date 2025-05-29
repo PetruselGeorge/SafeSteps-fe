@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       const interval = setInterval(() => {
         if (navigationRef.isReady()) {
           console.log("[Auth] Navigator is ready. Resetting to HomeScreen...");
-          reset(0, [{ name: "HomeScreen" }]);
+          reset(0, [{ name: "Drawer" }]);
           clearInterval(interval);
         } else {
           console.warn("[Auth] Navigator not ready, will retry...");

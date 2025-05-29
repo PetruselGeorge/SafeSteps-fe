@@ -16,4 +16,13 @@ export default StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
+  menuButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 999,
+    backgroundColor: "rgba(31,43,56,0.8)",
+    padding: 10,
+    borderRadius: 50,
+  },
 });

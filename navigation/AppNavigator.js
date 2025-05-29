@@ -5,14 +5,14 @@ import RegistrationScreenOne from "../screens/Auth/RegisterScreen/RegisterScreen
 import RegistrationScreenTwo from "../screens/Auth/RegisterScreen/RegisterScreenStepTwo/RegistrationScreenTwo";
 import RegisterSuccess from "../screens/Auth/RegisterScreen/RegisterSuccess";
 import LoginScreen from "../screens/Auth/LoginScreen/LoginScreen";
-import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import Loader from "../utils/Loader/Loader";
 import WelcomeBack from "../screens/Auth/WelcomeBack/WelcomeBack";
+import DrawerNavigator from "./DraweNavigator";
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { isAuthenticated, loading, showWelcomeBack } = useAuth();  
+  const { isAuthenticated, loading, showWelcomeBack } = useAuth();
   if (loading) {
     return <Loader />;
   }
@@ -22,7 +22,7 @@ const AppNavigator = () => {
       {showWelcomeBack ? (
         <Stack.Screen name="WelcomeBack" component={WelcomeBack} />
       ) : isAuthenticated ? (
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="Drawer" component={DrawerNavigator} />
       ) : (
         <>
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />

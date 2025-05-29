@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import LottieView from "lottie-react-native";
 import { useAuth } from "../../../context/AuthContext";
 import { navigationRef, reset } from "../../../navigation/NavigationService";
-import { useFonts } from "expo-font";
 
 const backgroundImage = require("../../../assets/welcomebackpage/welcomeback-background.png");
 const starsAnimation = require("../../../assets/animations/stars.json");
@@ -33,7 +32,7 @@ const WelcomeBack = ({ onAnimationEnd }) => {
                   console.log(
                     "[WelcomeBack] Navigator ready. Redirecting to HomeScreen..."
                   );
-                  reset(0, [{ name: "HomeScreen" }]);
+                  reset(0, [{ name: "Drawer" }]);
                   clearInterval(interval);
                 } else {
                   console.log("[WelcomeBack] Navigator not ready yet...");
