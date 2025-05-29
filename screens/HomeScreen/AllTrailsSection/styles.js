@@ -74,4 +74,13 @@ trailInfo: {
   loadingIndicator: {
     marginVertical: 16,
   },
+  favoriteIcon: {
+  position: "absolute",
+  top: 8,
+  left: 8,
+  backgroundColor: "rgba(0,0,0,0.4)",
+  borderRadius: 20,
+  padding: 6,
+  zIndex: 10,
+},
 });

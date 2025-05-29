@@ -6,7 +6,14 @@ import { ImageBackground, TouchableOpacity, Text } from "react-native";
 import styles from "../styles";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function TrailCard({ item, handleUpdateImage }) {
+export default function TrailCard({
+  item,
+  handleUpdateImage,
+  isFavorite,
+  toggleFavorite,
+  showRemoveButton = false,
+  disableFavoriteToggle = false,
+}) {
   const { user } = useAuth();
   const [imageUri, setImageUri] = useState(null);
 
@@ -37,6 +44,26 @@ export default function TrailCard({ item, handleUpdateImage }) {
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
       >
+        {disableFavoriteToggle ? (
+          <Ionicons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={22}
+            color={isFavorite ? "#e74c3c" : "#ccc"}
+            style={styles.favoriteIcon}
+          />
+        ) : (
+          <TouchableOpacity
+            style={styles.favoriteIcon}
+            onPress={() => toggleFavorite(item.id)}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={22}
+              color={isFavorite ? "#e74c3c" : "#ccc"}
+            />
+          </TouchableOpacity>
+        )}
+
         <Animatable.View
           animation="fadeInUp"
           duration={600}
@@ -47,13 +74,23 @@ export default function TrailCard({ item, handleUpdateImage }) {
           <Text style={styles.trailInfo}>Difficulty: {item.difficulty}</Text>
         </Animatable.View>
 
-        {user?.role === "ROLE_ADMIN" && (
+        {showRemoveButton ? (
           <TouchableOpacity
             style={styles.editIcon}
-            onPress={() => handleUpdateImage(item.id)}
+            onPress={() => toggleFavorite(item.id)}
           >
-            <Ionicons name="camera" size={20} color="#A0CFFF" />
+            <Ionicons name="trash" size={20} color="white" />
           </TouchableOpacity>
+        ) : (
+          user?.role === "ROLE_ADMIN" &&
+          handleUpdateImage && (
+            <TouchableOpacity
+              style={styles.editIcon}
+              onPress={() => handleUpdateImage(item.id)}
+            >
+              <Ionicons name="camera" size={20} color="#A0CFFF" />
+            </TouchableOpacity>
+          )
         )}
       </ImageBackground>
     </Animatable.View>

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import {
   getAllTrails,
   searchTrailsWithFilters,
+  getAllFavoriteTrails,
   updateTrailMainImage,
+  removeFavoriteTrail,
 } from "../TrailsApi/api";
 import { Alert } from "react-native";
 import { View } from "react-native-animatable";
@@ -11,6 +13,7 @@ import AllTrailsContent from "./AllTrailsContent";
 import * as ImagePicker from "expo-image-picker";
 import SearchBar from "./utils/SearchBar/SearchBar";
 import { useDebounce } from "./utils/useDebounce";
+import { useFavorites } from "../../../context/FavoriteContext";
 
 export default function AllTrails({
   user,
@@ -29,87 +32,103 @@ export default function AllTrails({
   const [isSearching, setIsSearching] = useState(false);
   const [difficulty, setDifficulty] = useState("");
   const [maxDistance, setMaxDistance] = useState("");
+  const { favoriteIds, addToFavorites, removeFromFavorites, refreshFavorites } =
+    useFavorites();
 
   useEffect(() => {
     setPage(0);
     setHasMore(true);
     setTrails([]);
+    refreshFavorites();
     loadMore(0);
   }, []);
 
-const loadMore = async (pageToLoad = page) => {
-  if (loading || !hasMore) return;
-
-  setLoading(true);
-
-  const fetchFunction = isSearching
-    ? () =>
-        searchTrailsWithFilters(
-          debouncedQuery.trim(),
-          maxDistance,
-          difficulty,
-          pageToLoad
-        )
-    : () => getAllTrails(pageToLoad);
-
-  try {
-    const data = await fetchFunction();
-
-    if (Array.isArray(data.content)) {
-      setTrails((prev) => {
-        const existingIds = new Set(prev.map((t) => t.id));
-        const newItems = data.content.filter((t) => !existingIds.has(t.id));
-        return [...prev, ...newItems];
-      });
-
-      setPage(pageToLoad + 1);
-      setHasMore(!data.last);
-    } else {
-      throw new Error("Invalid response format");
+  const toggleFavorite = async (trailId) => {
+    try {
+      if (favoriteIds.includes(trailId)) {
+        await removeFromFavorites(trailId);
+      } else {
+        await addToFavorites(trailId);
+      }
+    } catch (err) {
+      console.error("Failed to toggle favorite:", err);
+      Alert.alert("Error", "Could not update favorite status.");
     }
-  } catch (err) {
-    console.error("Load more failed:", err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
- useEffect(() => {
-  const search = async () => {
-    const hasQuery = debouncedQuery.trim().length > 0;
-    const hasFilters = difficulty || maxDistance;
-
-    const isNowSearching = hasQuery || hasFilters;
-    setIsSearching(isNowSearching);
-
-    setPage(0);
-    setTrails([]);
-    setHasMore(true);
+  const loadMore = async (pageToLoad = page) => {
+    if (loading || !hasMore) return;
 
     setLoading(true);
 
-    try {
-      const result = isNowSearching
-        ? await searchTrailsWithFilters(
+    const fetchFunction = isSearching
+      ? () =>
+          searchTrailsWithFilters(
             debouncedQuery.trim(),
             maxDistance,
             difficulty,
-            0
+            pageToLoad
           )
-        : await getAllTrails(0);
+      : () => getAllTrails(pageToLoad);
 
-      setTrails(result.content || []);
-      setHasMore(!result.last);
-      setPage(1);
+    try {
+      const data = await fetchFunction();
+
+      if (Array.isArray(data.content)) {
+        setTrails((prev) => {
+          const existingIds = new Set(prev.map((t) => t.id));
+          const newItems = data.content.filter((t) => !existingIds.has(t.id));
+          return [...prev, ...newItems];
+        });
+
+        setPage(pageToLoad + 1);
+        setHasMore(!data.last);
+      } else {
+        throw new Error("Invalid response format");
+      }
     } catch (err) {
-      console.error("Search error:", err);
+      console.error("Load more failed:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  search();
-}, [debouncedQuery, difficulty, maxDistance]);
+  useEffect(() => {
+    const search = async () => {
+      const hasQuery = debouncedQuery.trim().length > 0;
+      const hasFilters = difficulty || maxDistance;
+
+      const isNowSearching = hasQuery || hasFilters;
+      setIsSearching(isNowSearching);
+
+      setPage(0);
+      setTrails([]);
+      setHasMore(true);
+
+      setLoading(true);
+
+      try {
+        const result = isNowSearching
+          ? await searchTrailsWithFilters(
+              debouncedQuery.trim(),
+              maxDistance,
+              difficulty,
+              0
+            )
+          : await getAllTrails(0);
+
+        setTrails(result.content || []);
+        setHasMore(!result.last);
+        setPage(1);
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    search();
+  }, [debouncedQuery, difficulty, maxDistance]);
 
   const updateTrailImageLocally = (trailId, newImageUri) => {
     setTrails((prev) =>
@@ -174,6 +193,8 @@ const loadMore = async (pageToLoad = page) => {
         handleUpdateImage={handleUpdateImage}
         user={user}
         onUploadSuccess={onNewTrail}
+        favoriteIds={favoriteIds}
+        toggleFavorite={toggleFavorite}
       />
     </View>
   );

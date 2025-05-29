@@ -10,6 +10,8 @@ export default function AllTrailsContent({
   handleUpdateImage,
   user,
   onUploadSuccess,
+  favoriteIds,
+  toggleFavorite,
 }) {
   const debounceTimeout = useRef(null);
 
@@ -22,7 +24,12 @@ export default function AllTrailsContent({
   );
 
   const renderItem = ({ item }) => (
-    <TrailCard item={item} handleUpdateImage={handleUpdateImage} />
+    <TrailCard
+      item={item}
+      handleUpdateImage={handleUpdateImage}
+      isFavorite={favoriteIds.includes(item.id)}
+      toggleFavorite={toggleFavorite}
+    />
   );
 
   const renderFooter = () =>

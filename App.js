@@ -4,6 +4,7 @@ import { PaperProvider } from "react-native-paper";
 import { AuthProvider } from "./context/AuthContext";
 import AppNavigator from "./navigation/AppNavigator";
 import { navigationRef } from "./navigation/NavigationService";
+import { FavoritesProvider } from "./context/FavoriteContext";
 
 const App = () => {
   return (
@@ -11,7 +12,9 @@ const App = () => {
       <SafeAreaProvider>
         <NavigationContainer ref={navigationRef}>
           <AuthProvider>
-            <AppNavigator />
+            <FavoritesProvider>
+              <AppNavigator />
+            </FavoritesProvider>
           </AuthProvider>
         </NavigationContainer>
       </SafeAreaProvider>

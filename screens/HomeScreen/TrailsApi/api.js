@@ -181,3 +181,75 @@ export async function searchTrailsWithFilters(
 
   return data;
 }
+
+export async function toggleFavoriteTrail(trailId) {
+  const response = await authorizedFetch(`/favorites`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ trailId }),
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const data = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  if (!response.ok) {
+    const error = new Error(data?.message || "Failed to toggle favorite.");
+    error.status = response.status;
+    error.details = data;
+    throw error;
+  }
+
+  return data;
+}
+
+
+export async function getAllFavoriteTrails() {
+  const response = await authorizedFetch(`/favorites`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const data = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  if (!response.ok) {
+    const error = new Error(data?.message || "Failed to fetch favorites.");
+    error.status = response.status;
+    error.details = data;
+    throw error;
+  }
+
+  return data;
+}
+
+export async function removeFavoriteTrail(trailId) {
+  const response = await authorizedFetch(`/favorites/${trailId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const data = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  if (!response.ok) {
+    const error = new Error(data?.message || "Failed to remove from favorites.");
+    error.status = response.status;
+    error.details = data;
+    throw error;
+  }
+
+  return data;
+}
