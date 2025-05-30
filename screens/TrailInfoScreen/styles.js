@@ -1,53 +1,83 @@
 import { StyleSheet } from "react-native";
-
+//trail info screen style
 export default StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: "cover",
-  },
+scrollContent: {
+  paddingBottom: 50,
+  paddingHorizontal: 20,
+},
 
-  backButton: {
-    position: "absolute",
-    top: 60,
-    left: 20,
-    zIndex: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 20,
-    padding: 8,
-    flexDirection: "row",
-    alignItems: "center",
-  },
+background: {
+  flex: 1,
+  backgroundColor: "#101820",
+},
 
-  backText: {
-    color: "#fff",
-    marginLeft: 6,
-    fontSize: 16,
-  },
+header: {
+  marginTop: 40,
+  marginBottom: 10,
+  alignItems: "center",
+},
 
-  titleContainer: {
-    marginTop: 130,
-    paddingHorizontal: 20,
-    alignItems: "center",
-  },
+backButton: {
+  flexDirection: "row",
+  alignItems: "center",
+  alignSelf: "flex-start",
+},
 
-  pageTitle: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#A0CFFF",
-    textAlign: "center",
-  },
+backText: {
+  color: "#A0CFFF",
+  fontSize: 16,
+  marginLeft: 8,
+},
 
-  infoContainer: {
-    marginTop: 30,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 20,
-  },
+pageTitle: {
+  color: "#fff",
+  fontSize: 26,
+  fontWeight: "bold",
+  textAlign: "center",
+  marginTop: 30,
+},
 
-  info: {
-    fontSize: 16,
-    color: "#ddd",
-    marginBottom: 12,
-  },
+galleryWrapper: {
+  marginTop: 20,
+  borderRadius: 16,
+  overflow: "hidden",
+  backgroundColor: "rgba(255,255,255,0.05)",
+},
+
+infoContainer: {
+  marginTop: 25,
+  backgroundColor: "rgba(160, 207, 255, 0.05)",
+  borderRadius: 12,
+  padding: 16,
+},
+
+infoRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 12,
+},
+
+infoText: {
+  color: "#fff",
+  fontSize: 16,
+  marginLeft: 10,
+},
+
+addImageButton: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: 30,
+  paddingVertical: 10,
+  borderWidth: 1,
+  borderColor: "#A0CFFF",
+  borderRadius: 10,
+},
+
+addImageText: {
+  color: "#A0CFFF",
+  marginLeft: 8,
+  fontSize: 16,
+},
+
 });

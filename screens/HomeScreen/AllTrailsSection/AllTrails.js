@@ -106,7 +106,6 @@ export default function AllTrails({
       setHasMore(true);
 
       setLoading(true);
-
       try {
         const result = isNowSearching
           ? await searchTrailsWithFilters(
