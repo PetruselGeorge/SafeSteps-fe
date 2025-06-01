@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import {
   View,
   Animated,
@@ -6,37 +12,47 @@ import {
   ActivityIndicator,
   Text,
   Alert,
-  Image,
 } from "react-native";
-import { getTrailImages, fetchTrailImageAsBase64 } from "../TrailInfoApi/api";
-import styles, { CARD_WIDTH } from "./styles";
+import {
+  getTrailImages,
+  fetchTrailImageAsBase64,
+  deleteTrailImage,
+} from "../TrailInfoApi/api";
+import styles from "./styles";
+import { useAuth } from "../../../context/AuthContext"; // folosește corect calea ta
+import { Ionicons } from "@expo/vector-icons";
 
-export default function TrailImageGallery({ trailId }) {
+const TrailImageGallery = forwardRef(({ trailId }, ref) => {
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const opacity = useRef(new Animated.Value(1)).current;
+  const { user } = useAuth();
+
+  const fetchAndSetImages = async () => {
+    try {
+      const imageDtos = await getTrailImages(trailId);
+      const imagesWithData = await Promise.all(
+        imageDtos.map(async (img) => {
+          const base64 = await fetchTrailImageAsBase64(trailId, img.id);
+          return { id: img.id, uri: base64 };
+        })
+      );
+      setImages(imagesWithData);
+    } catch (err) {
+      Alert.alert("Error", "Could not load trail images.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    refreshImages: fetchAndSetImages,
+  }));
 
   useEffect(() => {
-    const loadImages = async () => {
-      try {
-        const imageDtos = await getTrailImages(trailId);
-        const imagesWithData = await Promise.all(
-          imageDtos.map(async (img) => {
-            const base64 = await fetchTrailImageAsBase64(trailId, img.id);
-            return { id: img.id, uri: base64 };
-          })
-        );
-        setImages(imagesWithData);
-      } catch (err) {
-        Alert.alert("Error", "Could not load trail images.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadImages();
+    fetchAndSetImages();
   }, [trailId]);
 
   useEffect(() => {
@@ -68,18 +84,37 @@ export default function TrailImageGallery({ trailId }) {
     });
   };
 
-  const goToNext = () => {
-    if (images.length > 0) {
-      const next = (currentIndex + 1) % images.length;
-      animateImageChange(next);
-    }
-  };
+  const deleteImageHandler = async () => {
+    const image = images[currentIndex];
+    if (!image) return;
 
-  const goToPrev = () => {
-    if (images.length > 0) {
-      const prev = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-      animateImageChange(prev);
-    }
+    Alert.alert("Delete Image", "Are you sure you want to delete this image?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteTrailImage(trailId, image.id);
+
+            const updatedImages = [...images];
+            updatedImages.splice(currentIndex, 1);
+
+            const newIndex = Math.max(0, currentIndex - 1);
+            setCurrentIndex(newIndex);
+            setImages(updatedImages);
+
+            Alert.alert("Deleted", "Image was deleted successfully.");
+          } catch (error) {
+            console.error("Delete error", error);
+            Alert.alert("Error", "Could not delete image.");
+          }
+        },
+      },
+    ]);
   };
 
   if (loading) {
@@ -96,27 +131,45 @@ export default function TrailImageGallery({ trailId }) {
 
   return (
     <View style={styles.container}>
-      <Animated.Image
-        source={{ uri: images[currentIndex].uri }}
-        style={[
-          styles.image,
-          {
-            opacity: opacity,
-          },
-        ]}
-      />
+      <View style={styles.imageWrapper}>
+        <Animated.Image
+          source={{ uri: images[currentIndex].uri }}
+          style={[styles.image, { opacity }]}
+        />
+
+        {user?.role === "ROLE_ADMIN" && (
+          <TouchableOpacity
+            onPress={deleteImageHandler}
+            style={styles.deleteOverlayButton}
+          >
+            <Ionicons name="trash-outline" size={22} color="#FF6B6B" />
+          </TouchableOpacity>
+        )}
+      </View>
 
       <View style={styles.controls}>
-        <TouchableOpacity onPress={goToPrev} style={styles.button}>
+        <TouchableOpacity
+          onPress={() =>
+            animateImageChange(
+              (currentIndex - 1 + images.length) % images.length
+            )
+          }
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>◀</Text>
         </TouchableOpacity>
         <Text style={styles.indexText}>
           {currentIndex + 1} / {images.length}
         </Text>
-        <TouchableOpacity onPress={goToNext} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => animateImageChange((currentIndex + 1) % images.length)}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>▶</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+});
+
+export default TrailImageGallery;

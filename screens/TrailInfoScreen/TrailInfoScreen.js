@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 import TrailImageGallery from "./TrailImageGallery/TrailImageGallery";
 import { useAuth } from "../../context/AuthContext";
+import ImageUploader from "./ImageUploader/ImageUploader";
 
 export default function TrailInfoScreen({ route }) {
   const navigation = useNavigation();
   const { trail } = route.params;
-  const resolvedImage = require("../../assets/homescreen/homescreen-background.png");
   const { user } = useAuth();
+  const galleryRef = useRef(null);
+  const resolvedImage = require("../../assets/homescreen/homescreen-background.png");
+
   return (
     <ImageBackground source={resolvedImage} style={styles.background}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -32,7 +35,7 @@ export default function TrailInfoScreen({ route }) {
         </View>
 
         <View style={styles.galleryWrapper}>
-          <TrailImageGallery trailId={trail.id} />
+          <TrailImageGallery ref={galleryRef} trailId={trail.id} />
         </View>
 
         <View style={styles.infoContainer}>
@@ -59,12 +62,8 @@ export default function TrailInfoScreen({ route }) {
         </View>
 
         {user?.role === "ROLE_ADMIN" && (
-          <TouchableOpacity style={styles.addImageButton}>
-            <Ionicons name="image-outline" size={20} color="#A0CFFF" />
-            <Text style={styles.addImageText}>Add Image</Text>
-          </TouchableOpacity>
+          <ImageUploader trailId={trail.id} galleryRef={galleryRef} />
         )}
-        
       </ScrollView>
     </ImageBackground>
   );

@@ -59,6 +59,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
   },
+imageWrapper: {
+  position: "relative",
+  width: CARD_WIDTH,
+  height: CARD_HEIGHT,
+},
+
+deleteOverlayButton: {
+  position: "absolute",
+  top: 8,
+  right: 8,
+  backgroundColor: "rgba(255, 255, 255, 0.15)",
+  padding: 6,
+  borderRadius: 20,
+  zIndex: 10,
+},
+
+deleteOverlayText: {
+  fontSize: 18,
+  color: "#FF6B6B",
+  fontWeight: "bold",
+},
+
 });
 
 export default styles;
