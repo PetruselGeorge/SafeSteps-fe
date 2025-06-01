@@ -39,6 +39,9 @@
     "react-native-reanimated": "^3.17.5",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
+    "react-native-svg": "^15.11.2",
+    "react-native-svg-charts": "^5.4.0",
+    "victory-native": "^35.3.1",
     "world-countries": "^5.1.0"
   },
   "devDependencies": {

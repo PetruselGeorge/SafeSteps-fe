@@ -45,3 +45,15 @@ export const deleteTrailImage = async (trailId, imageId) => {
     throw new Error("Failed to delete image");
   }
 };
+
+export const getWeatherForecastByTrail = async (trailId) => {
+  const response = await authorizedFetch(`/weather/forecast/by-trail/${trailId}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch weather forecast");
+  }
+
+  return await response.json();
+};

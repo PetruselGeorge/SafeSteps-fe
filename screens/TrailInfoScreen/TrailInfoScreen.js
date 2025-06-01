@@ -12,6 +12,7 @@ import styles from "./styles";
 import TrailImageGallery from "./TrailImageGallery/TrailImageGallery";
 import { useAuth } from "../../context/AuthContext";
 import ImageUploader from "./ImageUploader/ImageUploader";
+import WeatherForecastSection from "./WeatherForecastSection/WeatherForecastSection";
 
 export default function TrailInfoScreen({ route }) {
   const navigation = useNavigation();
@@ -38,6 +39,10 @@ export default function TrailInfoScreen({ route }) {
           <TrailImageGallery ref={galleryRef} trailId={trail.id} />
         </View>
 
+        {user?.role === "ROLE_ADMIN" && (
+          <ImageUploader trailId={trail.id} galleryRef={galleryRef} />
+        )}
+
         <View style={styles.infoContainer}>
           <View style={styles.infoRow}>
             <MaterialIcons name="directions-walk" size={20} color="#A0CFFF" />
@@ -59,11 +64,10 @@ export default function TrailInfoScreen({ route }) {
               </Text>
             </View>
           )}
-        </View>
 
-        {user?.role === "ROLE_ADMIN" && (
-          <ImageUploader trailId={trail.id} galleryRef={galleryRef} />
-        )}
+          <WeatherForecastSection trailId={trail.id} />
+
+        </View>
       </ScrollView>
     </ImageBackground>
   );
