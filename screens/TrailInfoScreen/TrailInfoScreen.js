@@ -5,6 +5,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +15,8 @@ import TrailImageGallery from "./TrailImageGallery/TrailImageGallery";
 import { useAuth } from "../../context/AuthContext";
 import ImageUploader from "./ImageUploader/ImageUploader";
 import WeatherForecastSection from "./WeatherForecastSection/WeatherForecastSection";
+import TrailReviewSection from "./TrailReviewSection/TrailReviewSection";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function TrailInfoScreen({ route }) {
   const navigation = useNavigation();
@@ -23,7 +27,12 @@ export default function TrailInfoScreen({ route }) {
 
   return (
     <ImageBackground source={resolvedImage} style={styles.background}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={Platform.OS === "ios" ? 20 : 30}
+      >
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -66,9 +75,10 @@ export default function TrailInfoScreen({ route }) {
           )}
 
           <WeatherForecastSection trailId={trail.id} />
-
         </View>
-      </ScrollView>
+
+        <TrailReviewSection trailId={trail.id} />
+      </KeyboardAwareScrollView>
     </ImageBackground>
   );
 }
