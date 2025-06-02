@@ -9,6 +9,7 @@ import Loader from "../utils/Loader/Loader";
 import WelcomeBack from "../screens/Auth/WelcomeBack/WelcomeBack";
 import DrawerNavigator from "./DraweNavigator";
 import TrailInfoScreen from "../screens/TrailInfoScreen/TrailInfoScreen";
+import TrailMap from "../screens/TrailMap/TrailMap";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const AppNavigator = () => {
         <>
           <Stack.Screen name="Drawer" component={DrawerNavigator} />
           <Stack.Screen name="TrailInfo" component={TrailInfoScreen} />
+          <Stack.Screen name="TrailMap" component={TrailMap} />
         </>
       ) : (
         <>

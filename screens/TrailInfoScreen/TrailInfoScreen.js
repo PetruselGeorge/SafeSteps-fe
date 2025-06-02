@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +18,7 @@ import ImageUploader from "./ImageUploader/ImageUploader";
 import WeatherForecastSection from "./WeatherForecastSection/WeatherForecastSection";
 import TrailReviewSection from "./TrailReviewSection/TrailReviewSection";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { getWeatherForecastByTrail } from "./TrailInfoApi/api";
 
 export default function TrailInfoScreen({ route }) {
   const navigation = useNavigation();
@@ -24,7 +26,46 @@ export default function TrailInfoScreen({ route }) {
   const { user } = useAuth();
   const galleryRef = useRef(null);
   const resolvedImage = require("../../assets/homescreen/homescreen-background.png");
+  const handleStartTrail = async () => {
+    try {
+      const forecastData = await getWeatherForecastByTrail(trail.id);
+      const hourly = forecastData.hourly;
 
+      const now = new Date();
+      const nextHours = hourly.filter((entry) => {
+        const time = new Date(entry.time);
+        return time > now && time - now <= 3 * 60 * 60 * 1000;
+      });
+
+      const badWeather = nextHours.some(
+        (hour) =>
+          hour.precipitation > 0.1 ||
+          [0, 1, 2, 3, 61, 63, 65, 80, 81, 82, 95, 96, 99].includes(
+            hour.weatherCode
+          )
+      );
+
+      if (badWeather) {
+        Alert.alert(
+          "Warning",
+          "In the next hours there might be a storm do you wish to proceed?",
+          [
+            { text: "Quit", style: "cancel" },
+            {
+              text: "Start Anyway",
+              style: "default",
+              onPress: () =>
+                navigation.navigate("TrailMap", { trailId: trail.id }),
+            },
+          ]
+        );
+      } else {
+        navigation.navigate("TrailMap", { trailId: trail.id });
+      }
+    } catch (error) {
+      navigation.navigate("TrailMap", { trailId: trail.id });
+    }
+  };
   return (
     <ImageBackground source={resolvedImage} style={styles.background}>
       <KeyboardAwareScrollView
@@ -51,6 +92,18 @@ export default function TrailInfoScreen({ route }) {
         {user?.role === "ROLE_ADMIN" && (
           <ImageUploader trailId={trail.id} galleryRef={galleryRef} />
         )}
+
+        <View style={{ marginVertical: 20, alignItems: "center" }}>
+          <TouchableOpacity
+            style={styles.startTrail}
+            onPress={handleStartTrail}
+          >
+            <Ionicons name="walk-outline" size={20} color="white" />
+            <Text style={{ color: "white", marginLeft: 8, fontWeight: "600" }}>
+              Start Trail
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.infoContainer}>
           <View style={styles.infoRow}>

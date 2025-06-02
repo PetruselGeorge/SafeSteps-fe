@@ -149,7 +149,7 @@ const TrailReviewSection = ({ trailId }) => {
 
   return (
     <View style={styles.reviewSection}>
-      <Text style={styles.reviewTitle}>User Reviews</Text>
+      <Text style={styles.reviewTitle}>Reviews</Text>
 
       {loading && reviews.length === 0 ? (
         <ActivityIndicator
