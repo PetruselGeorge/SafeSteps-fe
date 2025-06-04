@@ -123,7 +123,7 @@ export default StyleSheet.create({
   },
 
   strengthText: {
-    color: "#A0CFFF", // același accent deschis din buton-disabled
+    color: "#A0CFFF",
     fontSize: 14,
     fontWeight: "600",
     letterSpacing: 0.5,

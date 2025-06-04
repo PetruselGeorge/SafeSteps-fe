@@ -1,6 +1,4 @@
-// src/screens/WelcomeScreen/WelcomeScreen.js
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Asset } from "expo-asset";
 import Loader from "../../utils/Loader/Loader";

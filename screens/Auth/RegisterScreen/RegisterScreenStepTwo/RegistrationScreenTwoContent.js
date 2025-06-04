@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -10,10 +9,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from "react-native-keyboard-aware-scroll-view";
 import styles from "./styles";
 import { FlatList } from "react-native";
 const RegistrationScreenTwoContent = ({

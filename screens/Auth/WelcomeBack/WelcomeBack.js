@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ImageBackground, View } from "react-native";
 import WelcomeBackContent from "./WelcomeBackContent";
 import styles from "./styles";

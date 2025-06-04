@@ -26,16 +26,16 @@ export default StyleSheet.create({
     marginTop: 5,
   },
   reviewScroll: {
-    height: 220, // 👈 înălțime fixă pentru recenzii pe orizontală
+    height: 220, 
     paddingHorizontal: 10,
   },
   reviewCard: {
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderRadius: 15,
     padding: 15,
-    marginRight: 12, // 👈 spațiere între carduri
-    width: 280, // 👈 lățime fixă
-    flexShrink: 0, // 👈 nu lăsa să se micșoreze
+    marginRight: 12, 
+    width: 280, 
+    flexShrink: 0,
   },
   reviewAuthor: {
     fontWeight: "600",

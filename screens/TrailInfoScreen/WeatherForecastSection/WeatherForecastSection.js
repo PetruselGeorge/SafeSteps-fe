@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 import { getWeatherForecastByTrail } from "../TrailInfoApi/api";
 import WeatherChart from "./WeatherChart";

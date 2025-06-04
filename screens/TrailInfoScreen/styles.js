@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-//trail info screen style
+
 export default StyleSheet.create({
   scrollContent: {
     paddingBottom: 50,

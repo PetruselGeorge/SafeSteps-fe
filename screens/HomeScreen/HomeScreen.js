@@ -9,8 +9,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
-import UploadTrailSection from "./UploadTrailSection/UploadTrailSection";
-import TrailCard from "./AllTrailsSection/utils/TrailCard";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAllTrails } from "./TrailsApi/api";

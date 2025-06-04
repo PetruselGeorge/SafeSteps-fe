@@ -8,7 +8,7 @@ async function request(endpoint, method = "GET", body, needsAuth = true) {
     if (needsAuth) {
       const isValid = await validateOrRefreshToken();
       if (!isValid)
-        throw new Error("Autentificare expirată. Te rugăm să te reconectezi.");
+        throw new Error("Expired auth. Please login!");
     }
 
     const accessToken = await AsyncStorage.getItem("accessToken");

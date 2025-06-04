@@ -1,5 +1,3 @@
-// styles.js
-
 export const successStyles = {
   container: {
     flex: 1,

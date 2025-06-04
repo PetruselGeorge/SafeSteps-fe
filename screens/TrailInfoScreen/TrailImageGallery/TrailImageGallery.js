@@ -1,4 +1,4 @@
-import React, {
+import {
   useEffect,
   useRef,
   useState,
@@ -19,7 +19,7 @@ import {
   deleteTrailImage,
 } from "../TrailInfoApi/api";
 import styles from "./styles";
-import { useAuth } from "../../../context/AuthContext"; // folosește corect calea ta
+import { useAuth } from "../../../context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 
 const TrailImageGallery = forwardRef(({ trailId }, ref) => {
