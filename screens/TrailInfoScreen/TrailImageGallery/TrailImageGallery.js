@@ -156,16 +156,18 @@ const TrailImageGallery = forwardRef(({ trailId }, ref) => {
           }
           style={styles.button}
         >
-          <Text style={styles.buttonText}>◀</Text>
+          <Ionicons name="chevron-back" size={24} color="white" />
         </TouchableOpacity>
+
         <Text style={styles.indexText}>
           {currentIndex + 1} / {images.length}
         </Text>
+
         <TouchableOpacity
           onPress={() => animateImageChange((currentIndex + 1) % images.length)}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>▶</Text>
+          <Ionicons name="chevron-forward" size={24} color="white" />
         </TouchableOpacity>
       </View>
     </View>
