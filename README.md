@@ -1,4 +1,5 @@
-## SafeSteps – Frontend  
+## SafeSteps – Frontend
+
 SAFE HIKING APPLICATION  
 Modern, modular React Native app for safe mountain hiking. Includes authentication, difficulty estimation, real-time weather, reviews, and interactive maps.
 
@@ -6,21 +7,23 @@ Modern, modular React Native app for safe mountain hiking. Includes authenticati
 
 ## Prerequisites
 
-- Node.js 18+  
-- Expo CLI (`npm install -g expo-cli`)  
-- Android Studio (for emulator)  
-- Xcode (for iOS, optional)  
+- Node.js 18+
+- Expo CLI (`npm install -g expo-cli`)
+- Android Studio (for emulator)
+- Xcode (for iOS, optional)
 - Git
 
 ---
 
 ## 1. Clone the repository
+
 ```
 git clone https://github.com/PetruselGeorge/safesteps-fe.git
 cd safesteps-fe
 ```
 
 ## 2. Install dependecies
+
 ```
 npm install
 ```
@@ -40,6 +43,7 @@ npx expo start
 ```
 
 ---
+
 ## You can now run the app:
 
 `1. On Android Emulator (via Android Studio)`
@@ -51,9 +55,44 @@ npx expo start
 ---
 
 ## Architecture Overview:
+
 The frontend uses a feature-based modular architecture for scalable development.
 
-----
+---
+
 # Preview:
 
-![Start Screen Preview](./assets/)
+### Start Screen Preview
+
+<img src="./assets/screenshots/1.jpg" width="300">
+
+### Register Screen Preview
+
+<img src="./assets/screenshots/2.jpg" width="300">
+<img src="./assets/screenshots/3.jpg" width="300">
+
+### Home Screen Preview
+
+<img src="./assets/screenshots/4.jpg" width="300">
+
+### Favorite Screen Preview
+
+<img src="./assets/screenshots/5.jpg" width="300">
+
+
+### Add Trail Preview
+
+<img src="./assets/screenshots/6.jpg" width="300">
+<img src="./assets/screenshots/7.jpg" width="300">
+
+### Trail Info Screen Preview
+<img src="./assets/screenshots/8.jpg" width="300">
+<img src="./assets/screenshots/9.jpg" width="300">
+<img src="./assets/screenshots/10.jpg" width="300">
+
+### Trail Map Preview + Alerts
+
+<img src="./assets/screenshots/11.jpg" width="300">
+<img src="./assets/screenshots/12.jpg" width="300">
+<img src="./assets/screenshots/13.jpg" width="300">
+
